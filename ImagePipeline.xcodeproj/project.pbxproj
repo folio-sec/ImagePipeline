@@ -1,0 +1,464 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		140C334821D93BD3007BDE61 /* ImagePipeline.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140C333E21D93BD3007BDE61 /* ImagePipeline.framework */; };
+		140C334D21D93BD3007BDE61 /* ImagePipelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C334C21D93BD3007BDE61 /* ImagePipelineTests.swift */; };
+		140C334F21D93BD3007BDE61 /* ImagePipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = 140C334121D93BD3007BDE61 /* ImagePipeline.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		140C335921D93BFE007BDE61 /* ImagePipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C335821D93BFE007BDE61 /* ImagePipeline.swift */; };
+		140C335B21D93C08007BDE61 /* Fetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C335A21D93C08007BDE61 /* Fetcher.swift */; };
+		140C335D21D93E0F007BDE61 /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C335C21D93E0F007BDE61 /* Decoder.swift */; };
+		140C336B21D93F77007BDE61 /* types.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 140C336321D93F06007BDE61 /* types.h */; };
+		140C336C21D93F77007BDE61 /* decode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 140C336421D93F06007BDE61 /* decode.h */; };
+		140C336E21D93F9E007BDE61 /* libwebpdecoder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 140C336621D93F06007BDE61 /* libwebpdecoder.a */; };
+		140C337021D945CA007BDE61 /* MemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C336F21D945CA007BDE61 /* MemoryCache.swift */; };
+		140C337221D945D9007BDE61 /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C337121D945D9007BDE61 /* DiskCache.swift */; };
+		140C337421D945EB007BDE61 /* CacheEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C337321D945EB007BDE61 /* CacheEntry.swift */; };
+		140C339821D9D47C007BDE61 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C339721D9D47C007BDE61 /* Storage.swift */; };
+		140C339A21DA1493007BDE61 /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C339921DA1493007BDE61 /* Transition.swift */; };
+		140C339F21DA2388007BDE61 /* 200x150.png in Resources */ = {isa = PBXBuildFile; fileRef = 140C339B21DA2387007BDE61 /* 200x150.png */; };
+		140C33A021DA2388007BDE61 /* 200x150.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 140C339C21DA2387007BDE61 /* 200x150.jpg */; };
+		140C33A121DA2388007BDE61 /* 200x150.gif in Resources */ = {isa = PBXBuildFile; fileRef = 140C339D21DA2388007BDE61 /* 200x150.gif */; };
+		140C33A221DA2388007BDE61 /* 200x150.webp in Resources */ = {isa = PBXBuildFile; fileRef = 140C339E21DA2388007BDE61 /* 200x150.webp */; };
+		140C33A521DA273B007BDE61 /* SnapshotTesting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140C33A421DA273B007BDE61 /* SnapshotTesting.framework */; };
+		140C33A721DA2992007BDE61 /* SnapshotTesting.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 140C33A421DA273B007BDE61 /* SnapshotTesting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		140C33A921DA2CA5007BDE61 /* c0ffee.webp in Resources */ = {isa = PBXBuildFile; fileRef = 140C33A821DA2CA5007BDE61 /* c0ffee.webp */; };
+		140C33AB21DA3399007BDE61 /* c0ffee.png in Resources */ = {isa = PBXBuildFile; fileRef = 140C33AA21DA3399007BDE61 /* c0ffee.png */; };
+		140C33AD21DA4883007BDE61 /* 80x60.webp in Resources */ = {isa = PBXBuildFile; fileRef = 140C33AC21DA4882007BDE61 /* 80x60.webp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		140C334921D93BD3007BDE61 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 140C333521D93BD3007BDE61 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 140C333D21D93BD3007BDE61;
+			remoteInfo = ImagePipeline;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		140C336A21D93F5B007BDE61 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = include/webp;
+			dstSubfolderSpec = 6;
+			files = (
+				140C336B21D93F77007BDE61 /* types.h in CopyFiles */,
+				140C336C21D93F77007BDE61 /* decode.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		140C33A621DA2985007BDE61 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				140C33A721DA2992007BDE61 /* SnapshotTesting.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		140C333E21D93BD3007BDE61 /* ImagePipeline.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ImagePipeline.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		140C334121D93BD3007BDE61 /* ImagePipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImagePipeline.h; sourceTree = "<group>"; };
+		140C334221D93BD3007BDE61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		140C334721D93BD3007BDE61 /* ImagePipelineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImagePipelineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		140C334C21D93BD3007BDE61 /* ImagePipelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePipelineTests.swift; sourceTree = "<group>"; };
+		140C334E21D93BD3007BDE61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		140C335821D93BFE007BDE61 /* ImagePipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePipeline.swift; sourceTree = "<group>"; };
+		140C335A21D93C08007BDE61 /* Fetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fetcher.swift; sourceTree = "<group>"; };
+		140C335C21D93E0F007BDE61 /* Decoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
+		140C336321D93F06007BDE61 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		140C336421D93F06007BDE61 /* decode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = decode.h; sourceTree = "<group>"; };
+		140C336621D93F06007BDE61 /* libwebpdecoder.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwebpdecoder.a; sourceTree = "<group>"; };
+		140C336721D93F1D007BDE61 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		140C336F21D945CA007BDE61 /* MemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCache.swift; sourceTree = "<group>"; };
+		140C337121D945D9007BDE61 /* DiskCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCache.swift; sourceTree = "<group>"; };
+		140C337321D945EB007BDE61 /* CacheEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheEntry.swift; sourceTree = "<group>"; };
+		140C339721D9D47C007BDE61 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		140C339921DA1493007BDE61 /* Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
+		140C339B21DA2387007BDE61 /* 200x150.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 200x150.png; sourceTree = "<group>"; };
+		140C339C21DA2387007BDE61 /* 200x150.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 200x150.jpg; sourceTree = "<group>"; };
+		140C339D21DA2388007BDE61 /* 200x150.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = 200x150.gif; sourceTree = "<group>"; };
+		140C339E21DA2388007BDE61 /* 200x150.webp */ = {isa = PBXFileReference; lastKnownFileType = file; path = 200x150.webp; sourceTree = "<group>"; };
+		140C33A421DA273B007BDE61 /* SnapshotTesting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapshotTesting.framework; path = Carthage/Build/iOS/SnapshotTesting.framework; sourceTree = "<group>"; };
+		140C33A821DA2CA5007BDE61 /* c0ffee.webp */ = {isa = PBXFileReference; lastKnownFileType = file; path = c0ffee.webp; sourceTree = "<group>"; };
+		140C33AA21DA3399007BDE61 /* c0ffee.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = c0ffee.png; sourceTree = "<group>"; };
+		140C33AC21DA4882007BDE61 /* 80x60.webp */ = {isa = PBXFileReference; lastKnownFileType = file; path = 80x60.webp; sourceTree = "<group>"; };
+		140C76CF21DA579600A4582F /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		140C76D021DA579600A4582F /* ImagePipelineTests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ImagePipelineTests.xcconfig; sourceTree = "<group>"; };
+		140C76D121DA579600A4582F /* Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
+		140C76D221DA579600A4582F /* ImagePipeline.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ImagePipeline.xcconfig; sourceTree = "<group>"; };
+		140C76D321DA579600A4582F /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		140C333B21D93BD3007BDE61 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				140C336E21D93F9E007BDE61 /* libwebpdecoder.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		140C334421D93BD3007BDE61 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				140C334821D93BD3007BDE61 /* ImagePipeline.framework in Frameworks */,
+				140C33A521DA273B007BDE61 /* SnapshotTesting.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		140C333421D93BD3007BDE61 = {
+			isa = PBXGroup;
+			children = (
+				140C334021D93BD3007BDE61 /* ImagePipeline */,
+				140C76CE21DA579600A4582F /* Configurations */,
+				140C335E21D93E40007BDE61 /* Vendor */,
+				140C334B21D93BD3007BDE61 /* ImagePipelineTests */,
+				140C333F21D93BD3007BDE61 /* Products */,
+				140C336D21D93F9E007BDE61 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		140C333F21D93BD3007BDE61 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				140C333E21D93BD3007BDE61 /* ImagePipeline.framework */,
+				140C334721D93BD3007BDE61 /* ImagePipelineTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		140C334021D93BD3007BDE61 /* ImagePipeline */ = {
+			isa = PBXGroup;
+			children = (
+				140C334121D93BD3007BDE61 /* ImagePipeline.h */,
+				140C335821D93BFE007BDE61 /* ImagePipeline.swift */,
+				140C339921DA1493007BDE61 /* Transition.swift */,
+				140C335A21D93C08007BDE61 /* Fetcher.swift */,
+				140C335C21D93E0F007BDE61 /* Decoder.swift */,
+				140C336F21D945CA007BDE61 /* MemoryCache.swift */,
+				140C337121D945D9007BDE61 /* DiskCache.swift */,
+				140C339721D9D47C007BDE61 /* Storage.swift */,
+				140C337321D945EB007BDE61 /* CacheEntry.swift */,
+				140C336721D93F1D007BDE61 /* module.modulemap */,
+				140C334221D93BD3007BDE61 /* Info.plist */,
+			);
+			path = ImagePipeline;
+			sourceTree = "<group>";
+		};
+		140C334B21D93BD3007BDE61 /* ImagePipelineTests */ = {
+			isa = PBXGroup;
+			children = (
+				140C334C21D93BD3007BDE61 /* ImagePipelineTests.swift */,
+				140C334E21D93BD3007BDE61 /* Info.plist */,
+				140C33A321DA2391007BDE61 /* Fixtures */,
+			);
+			path = ImagePipelineTests;
+			sourceTree = "<group>";
+		};
+		140C335E21D93E40007BDE61 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				140C336121D93F06007BDE61 /* webp */,
+			);
+			path = Vendor;
+			sourceTree = "<group>";
+		};
+		140C336121D93F06007BDE61 /* webp */ = {
+			isa = PBXGroup;
+			children = (
+				140C336221D93F06007BDE61 /* include */,
+				140C336521D93F06007BDE61 /* lib */,
+			);
+			path = webp;
+			sourceTree = "<group>";
+		};
+		140C336221D93F06007BDE61 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				140C336321D93F06007BDE61 /* types.h */,
+				140C336421D93F06007BDE61 /* decode.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		140C336521D93F06007BDE61 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				140C336621D93F06007BDE61 /* libwebpdecoder.a */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		140C336D21D93F9E007BDE61 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				140C33A421DA273B007BDE61 /* SnapshotTesting.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		140C33A321DA2391007BDE61 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				140C339B21DA2387007BDE61 /* 200x150.png */,
+				140C339C21DA2387007BDE61 /* 200x150.jpg */,
+				140C339D21DA2388007BDE61 /* 200x150.gif */,
+				140C339E21DA2388007BDE61 /* 200x150.webp */,
+				140C33AA21DA3399007BDE61 /* c0ffee.png */,
+				140C33A821DA2CA5007BDE61 /* c0ffee.webp */,
+				140C33AC21DA4882007BDE61 /* 80x60.webp */,
+			);
+			path = Fixtures;
+			sourceTree = "<group>";
+		};
+		140C76CE21DA579600A4582F /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				140C76CF21DA579600A4582F /* Release.xcconfig */,
+				140C76D021DA579600A4582F /* ImagePipelineTests.xcconfig */,
+				140C76D121DA579600A4582F /* Shared.xcconfig */,
+				140C76D221DA579600A4582F /* ImagePipeline.xcconfig */,
+				140C76D321DA579600A4582F /* Debug.xcconfig */,
+			);
+			path = Configurations;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		140C333921D93BD3007BDE61 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				140C334F21D93BD3007BDE61 /* ImagePipeline.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		140C333D21D93BD3007BDE61 /* ImagePipeline */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 140C335221D93BD3007BDE61 /* Build configuration list for PBXNativeTarget "ImagePipeline" */;
+			buildPhases = (
+				140C333921D93BD3007BDE61 /* Headers */,
+				140C336A21D93F5B007BDE61 /* CopyFiles */,
+				140C333A21D93BD3007BDE61 /* Sources */,
+				140C333B21D93BD3007BDE61 /* Frameworks */,
+				140C333C21D93BD3007BDE61 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ImagePipeline;
+			productName = ImagePipeline;
+			productReference = 140C333E21D93BD3007BDE61 /* ImagePipeline.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		140C334621D93BD3007BDE61 /* ImagePipelineTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 140C335521D93BD3007BDE61 /* Build configuration list for PBXNativeTarget "ImagePipelineTests" */;
+			buildPhases = (
+				140C334321D93BD3007BDE61 /* Sources */,
+				140C334421D93BD3007BDE61 /* Frameworks */,
+				140C334521D93BD3007BDE61 /* Resources */,
+				140C33A621DA2985007BDE61 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				140C334A21D93BD3007BDE61 /* PBXTargetDependency */,
+			);
+			name = ImagePipelineTests;
+			productName = ImagePipelineTests;
+			productReference = 140C334721D93BD3007BDE61 /* ImagePipelineTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		140C333521D93BD3007BDE61 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = "Kishikawa Katsumi";
+				TargetAttributes = {
+					140C333D21D93BD3007BDE61 = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
+					};
+					140C334621D93BD3007BDE61 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 140C333821D93BD3007BDE61 /* Build configuration list for PBXProject "ImagePipeline" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 140C333421D93BD3007BDE61;
+			productRefGroup = 140C333F21D93BD3007BDE61 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				140C333D21D93BD3007BDE61 /* ImagePipeline */,
+				140C334621D93BD3007BDE61 /* ImagePipelineTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		140C333C21D93BD3007BDE61 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		140C334521D93BD3007BDE61 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				140C33AB21DA3399007BDE61 /* c0ffee.png in Resources */,
+				140C33AD21DA4883007BDE61 /* 80x60.webp in Resources */,
+				140C33A921DA2CA5007BDE61 /* c0ffee.webp in Resources */,
+				140C33A221DA2388007BDE61 /* 200x150.webp in Resources */,
+				140C33A021DA2388007BDE61 /* 200x150.jpg in Resources */,
+				140C339F21DA2388007BDE61 /* 200x150.png in Resources */,
+				140C33A121DA2388007BDE61 /* 200x150.gif in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		140C333A21D93BD3007BDE61 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				140C335921D93BFE007BDE61 /* ImagePipeline.swift in Sources */,
+				140C339821D9D47C007BDE61 /* Storage.swift in Sources */,
+				140C337021D945CA007BDE61 /* MemoryCache.swift in Sources */,
+				140C335D21D93E0F007BDE61 /* Decoder.swift in Sources */,
+				140C335B21D93C08007BDE61 /* Fetcher.swift in Sources */,
+				140C337221D945D9007BDE61 /* DiskCache.swift in Sources */,
+				140C339A21DA1493007BDE61 /* Transition.swift in Sources */,
+				140C337421D945EB007BDE61 /* CacheEntry.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		140C334321D93BD3007BDE61 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				140C334D21D93BD3007BDE61 /* ImagePipelineTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		140C334A21D93BD3007BDE61 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 140C333D21D93BD3007BDE61 /* ImagePipeline */;
+			targetProxy = 140C334921D93BD3007BDE61 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		140C335021D93BD3007BDE61 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 140C76D321DA579600A4582F /* Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		140C335121D93BD3007BDE61 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 140C76CF21DA579600A4582F /* Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		140C335321D93BD3007BDE61 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 140C76D221DA579600A4582F /* ImagePipeline.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		140C335421D93BD3007BDE61 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 140C76D221DA579600A4582F /* ImagePipeline.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		140C335621D93BD3007BDE61 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 140C76D021DA579600A4582F /* ImagePipelineTests.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		140C335721D93BD3007BDE61 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 140C76D021DA579600A4582F /* ImagePipelineTests.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		140C333821D93BD3007BDE61 /* Build configuration list for PBXProject "ImagePipeline" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				140C335021D93BD3007BDE61 /* Debug */,
+				140C335121D93BD3007BDE61 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		140C335221D93BD3007BDE61 /* Build configuration list for PBXNativeTarget "ImagePipeline" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				140C335321D93BD3007BDE61 /* Debug */,
+				140C335421D93BD3007BDE61 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		140C335521D93BD3007BDE61 /* Build configuration list for PBXNativeTarget "ImagePipelineTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				140C335621D93BD3007BDE61 /* Debug */,
+				140C335721D93BD3007BDE61 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 140C333521D93BD3007BDE61 /* Project object */;
+}
