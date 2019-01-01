@@ -8,8 +8,7 @@ public protocol Fetching {
 
 public final class Fetcher: Fetching {
     private let session: URLSession
-    private var tasks = [URL: URLSessionTask]()
-    private var canceled = [URL]()
+    private let taskExecutor = TaskExecutor()
 
     private let queue = DispatchQueue.init(label: "com.folio-sec.image-pipeline.fetcher", qos: .userInitiated)
 
@@ -17,18 +16,20 @@ public final class Fetcher: Fetching {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.httpShouldUsePipelining = true
         configuration.httpMaximumConnectionsPerHost = 4
+        configuration.timeoutIntervalForRequest = 30
+        configuration.timeoutIntervalForResource = 120
         session = URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
     }
 
     public func fetch(_ url: URL, completion: @escaping (CacheEntry?) -> Void, failure: @escaping (Error?) -> Void) {
-        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: 60)
+        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
         let task = session.dataTask(with: request) { [weak self] (data, response, error) in
             guard let self = self else {
                 fatalError("Fetcher has been released")
             }
 
             self.queue.sync {
-                self.tasks[url] = nil
+                self.taskExecutor.removeTask(for: url)
             }
 
             if let error = error as NSError?, error.code == NSURLErrorCancelled {
@@ -62,28 +63,74 @@ public final class Fetcher: Fetching {
         }
 
         queue.sync {
-            if let t = tasks[url] {
-                switch t.state {
-                case .running:
-                    break
-                case .suspended:
-                    t.cancel()
-                    tasks[url] = task
-                case .canceling, .completed:
-                    tasks[url] = task
-                }
-            }
-            task.resume()
-            tasks[url] = task
+            taskExecutor.push(DownloadTask(sessionTask: task, url: url))
         }
     }
 
     public func cancel(_ url: URL) {
-        tasks[url]?.cancel()
+        taskExecutor.cancel(for: url)
     }
 
     public func cancelAll() {
-        tasks.values.forEach { $0.cancel() }
+        taskExecutor.cancelAll()
+    }
+}
+
+private class TaskExecutor {
+    private var tasks = [DownloadTask]()
+    private var runningTasks = [URL: DownloadTask]()
+    private let maxConcurrentTasks = 4
+
+    func push(_ task: DownloadTask) {
+        if let index = tasks.firstIndex(of: task) {
+            tasks.remove(at: index)
+        }
+        tasks.append(task)
+        startPendingTasks()
+    }
+
+    func removeTask(for url: URL) {
+        runningTasks[url] = nil
+        startPendingTasks()
+    }
+
+    func cancel(for url: URL) {
+        if let task = runningTasks[url] {
+            task.sessionTask.cancel()
+            runningTasks[url] = nil
+        }
+    }
+
+    func cancelAll() {
+        (tasks + runningTasks.values).forEach { $0.sessionTask.cancel() }
+        tasks.removeAll()
+        runningTasks.removeAll()
+    }
+
+    private func startPendingTasks() {
+        while tasks.count > 0 && runningTasks.count <= maxConcurrentTasks {
+            let task = tasks.removeLast()
+            task.sessionTask.resume()
+            runningTasks[task.url] = task
+        }
+    }
+}
+
+private class DownloadTask: Hashable {
+    let sessionTask: URLSessionTask
+    let url: URL
+
+    init(sessionTask: URLSessionTask, url: URL) {
+        self.sessionTask = sessionTask
+        self.url = url
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(url)
+    }
+
+    static func == (lhs: DownloadTask, rhs: DownloadTask) -> Bool {
+        return lhs.url == rhs.url
     }
 }
 
