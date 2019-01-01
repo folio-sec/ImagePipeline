@@ -46,7 +46,7 @@ public final class Fetcher: Fetching {
             }
 
             let headers = response.allHeaderFields
-            var timeToLive = Date.distantFuture.timeIntervalSince1970
+            var timeToLive: TimeInterval? = nil
             if let cacheControl = headers["Cache-Control"] as? String {
                 let directives = parseCacheControlHeader(cacheControl)
                 if let maxAge = directives["max-age"], let ttl = TimeInterval(maxAge) {
@@ -54,10 +54,7 @@ public final class Fetcher: Fetching {
                 }
             }
 
-            guard let contentType = headers["Content-Type"] as? String, supportedContentTypes.contains(contentType) else {
-                failure(error)
-                return
-            }
+            let contentType = headers["Content-Type"] as? String
 
             let now = Date()
             let entry = CacheEntry(url: url, data: data, contentType: contentType, timeToLive: timeToLive, creationDate: now, modificationDate: now)
@@ -89,8 +86,6 @@ public final class Fetcher: Fetching {
         tasks.values.forEach { $0.cancel() }
     }
 }
-
-private let supportedContentTypes = ["image/png", "image/jpeg", "image/gif", "image/webp"]
 
 private let regex = try! NSRegularExpression(pattern:
     """

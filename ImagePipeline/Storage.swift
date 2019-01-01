@@ -30,8 +30,8 @@ public class SQLiteStorage: Storage {
                                  id TEXT NOT NULL PRIMARY KEY,
                                  url TEXT NOT NULL,
                                  data BLOB NOT NULL,
-                                 mime TEXT NOT NULL,
-                                 ttl INTEGER NOT NULL,
+                                 mime TEXT,
+                                 ttl INTEGER,
                                  created_at INTEGER NOT NULL,
                                  updated_at INTEGER NOT NULL
                              );
@@ -88,7 +88,9 @@ public class SQLiteStorage: Storage {
             try SQLite.execute { sqlite3_bind_text(statement, 2, entry.url.absoluteString.cString(using: .utf8), -1, SQLITE_TRANSIENT) }
             try SQLite.execute { entry.data.withUnsafeBytes { sqlite3_bind_blob(statement, 3, $0, Int32(entry.data.count), SQLITE_TRANSIENT) } }
             try SQLite.execute { sqlite3_bind_text(statement, 4, entry.contentType, -1, SQLITE_TRANSIENT) }
-            try SQLite.execute { sqlite3_bind_int64(statement, 5, sqlite3_int64(bitPattern: UInt64(entry.timeToLive))) }
+            if let timeToLive = entry.timeToLive {
+                try SQLite.execute { sqlite3_bind_int64(statement, 5, sqlite3_int64(bitPattern: UInt64(timeToLive))) }
+            }
             try SQLite.execute { sqlite3_bind_int64(statement, 6, sqlite3_int64(bitPattern: UInt64(entry.creationDate.timeIntervalSince1970))) }
             try SQLite.execute { sqlite3_bind_int64(statement, 7, sqlite3_int64(bitPattern: UInt64(entry.modificationDate.timeIntervalSince1970))) }
 

@@ -62,8 +62,16 @@ public final class ImagePipeline {
                 return
             }
             if let entry = self.diskCache.load(for: url) {
-                let expirationDate = entry.modificationDate.addingTimeInterval(entry.timeToLive)
-                if expirationDate > Date(), let image = self.decoder.decode(data: entry.data) {
+                if let ttl = entry.timeToLive {
+                    let expirationDate = entry.modificationDate.addingTimeInterval(ttl)
+                    if expirationDate  > Date(), let image = self.decoder.decode(data: entry.data) {
+                        self.memoryCache.store(image, for: url)
+                        DispatchQueue.main.async {
+                            self.setImage(image, for: url, into: imageView, transition: .none)
+                        }
+                        return
+                    }
+                } else if let image = self.decoder.decode(data: entry.data) {
                     self.memoryCache.store(image, for: url)
                     DispatchQueue.main.async {
                         self.setImage(image, for: url, into: imageView, transition: .none)
