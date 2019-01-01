@@ -9,9 +9,9 @@ public final class ImagePipeline {
     private let memoryCache: ImageCaching
 
     private let queue = DispatchQueue.init(label: "com.folio-sec.image-pipeline", qos: .userInitiated)
-    private var downloadTasks = [ImageViewReference: DownloadTask]()
+    private var presenters = [ImageViewReference: Presenter]()
 
-    private class DownloadTask {
+    private class Presenter {
         weak var imageView: UIImageView?
         let url: URL
 
@@ -61,12 +61,12 @@ public final class ImagePipeline {
             }
 
             let reference = ImageViewReference(imageView)
-            let downloadTask = self.downloadTasks[reference]
-            if let downloadTask = downloadTask {
-                self.fetcher.cancel(downloadTask.url)
+            let presenter = self.presenters[reference]
+            if let presenter = presenter {
+                self.fetcher.cancel(presenter.url)
             }
 
-            self.downloadTasks[reference] = DownloadTask(imageView: imageView, url: url)
+            self.presenters[reference] = Presenter(imageView: imageView, url: url)
             
             self.fetcher.fetch(url, completion: {
                 guard let entry = $0 else {
@@ -94,8 +94,8 @@ public final class ImagePipeline {
     }
 
     private func setImage(_ image: UIImage?, for url: URL, into imageView: UIImageView, transition: Transition) {
-        if let downloadTask = downloadTasks[ImageViewReference(imageView)], downloadTask.url == url {
-            if let imageView = downloadTask.imageView {
+        if let presenter = presenters[ImageViewReference(imageView)], presenter.url == url {
+            if let imageView = presenter.imageView {
                 switch transition.style {
                 case .none:
                     imageView.image = image
