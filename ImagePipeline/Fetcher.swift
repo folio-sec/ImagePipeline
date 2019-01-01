@@ -32,14 +32,9 @@ public final class Fetcher: Fetching {
             }
 
             if let error = error as NSError?, error.code == NSURLErrorCancelled {
-//                self.canceled.append(url)
                 completion(nil)
                 return
             }
-            
-//            if self.tasks.count < self.session.configuration.httpMaximumConnectionsPerHost {
-//                self.retryCanceledTasks(completion: completion)
-//            }
 
             guard let data = data, !data.isEmpty else {
                 failure(error)
@@ -96,11 +91,6 @@ public final class Fetcher: Fetching {
     public func cancelAll() {
         tasks.values.forEach { $0.cancel() }
     }
-
-//    func retryCanceledTasks(completion: @escaping (CacheEntry?) -> Void) {
-//        canceled.forEach { fetch($0, completion: completion) }
-//        canceled.removeAll()
-//    }
 }
 
 private let regex = try! NSRegularExpression(pattern:
