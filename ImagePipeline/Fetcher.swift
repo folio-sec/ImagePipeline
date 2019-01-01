@@ -46,24 +46,21 @@ public final class Fetcher: Fetching {
             }
 
             let headers = response.allHeaderFields
-            guard let cacheControl = headers["Cache-Control"] as? String else {
-                failure(error)
-                return
+            var timeToLive = Date.distantFuture.timeIntervalSince1970
+            if let cacheControl = headers["Cache-Control"] as? String {
+                let directives = parseCacheControlHeader(cacheControl)
+                if let maxAge = directives["max-age"], let ttl = TimeInterval(maxAge) {
+                    timeToLive = ttl
+                }
             }
 
-            let directives = parseCacheControlHeader(cacheControl)
-            guard let maxAge = directives["max-age"], let ttl = TimeInterval(maxAge) else {
-                failure(error)
-                return
-            }
-
-            guard let contentType = headers["Content-Type"] as? String else {
+            guard let contentType = headers["Content-Type"] as? String, supportedContentTypes.contains(contentType) else {
                 failure(error)
                 return
             }
 
             let now = Date()
-            let entry = CacheEntry(url: url, data: data, contentType: contentType, timeToLive: ttl, creationDate: now, modificationDate: now)
+            let entry = CacheEntry(url: url, data: data, contentType: contentType, timeToLive: timeToLive, creationDate: now, modificationDate: now)
             completion(entry)
         }
 
@@ -93,11 +90,12 @@ public final class Fetcher: Fetching {
     }
 }
 
+private let supportedContentTypes = ["image/png", "image/jpeg", "image/gif", "image/webp"]
+
 private let regex = try! NSRegularExpression(pattern:
     """
     ([a-zA-Z][a-zA-Z_-]*)\\s*(?:=(?:"([^"]*)"|([^ \t",;]*)))?
     """, options: [])
-
 private func parseCacheControlHeader(_ cacheControl: String) -> [String: String] {
     var directives = [String: String]()
     let matches = regex.matches(in: cacheControl, options: [], range: NSRange(location: 0, length: cacheControl.utf16.count))
