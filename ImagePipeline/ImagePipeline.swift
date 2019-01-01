@@ -34,15 +34,24 @@ public final class ImagePipeline {
     }
 
     public func load(_ url: URL, into imageView: UIImageView, transition: Transition = .none, defaultImage: UIImage? = nil, failureImage: UIImage? = nil) {
-        if Thread.isMainThread {
-            if imageView.image == nil {
-                imageView.image = defaultImage
-            }
-        } else {
-            DispatchQueue.main.sync {
-                if imageView.image == nil {
-                    imageView.image = defaultImage
+        imageView.image = defaultImage
+
+        if let image = self.memoryCache.load(for: url) {
+            imageView.image = image
+            return
+        }
+        if let entry = self.diskCache.load(for: url) {
+            if let ttl = entry.timeToLive {
+                let expirationDate = entry.modificationDate.addingTimeInterval(ttl)
+                if expirationDate  > Date(), let image = self.decoder.decode(data: entry.data) {
+                    self.memoryCache.store(image, for: url)
+                    imageView.image = image
+                    return
                 }
+            } else if let image = self.decoder.decode(data: entry.data) {
+                self.memoryCache.store(image, for: url)
+                imageView.image = image
+                return
             }
         }
 
@@ -53,36 +62,12 @@ public final class ImagePipeline {
 
             let reference = ImageViewReference(imageView)
             let downloadTask = self.downloadTasks[reference]
-            self.downloadTasks[reference] = DownloadTask(imageView: imageView, url: url)
-
-            if let image = self.memoryCache.load(for: url) {
-                DispatchQueue.main.async {
-                    self.setImage(image, for: url, into: imageView, transition: .none)
-                }
-                return
-            }
-            if let entry = self.diskCache.load(for: url) {
-                if let ttl = entry.timeToLive {
-                    let expirationDate = entry.modificationDate.addingTimeInterval(ttl)
-                    if expirationDate  > Date(), let image = self.decoder.decode(data: entry.data) {
-                        self.memoryCache.store(image, for: url)
-                        DispatchQueue.main.async {
-                            self.setImage(image, for: url, into: imageView, transition: .none)
-                        }
-                        return
-                    }
-                } else if let image = self.decoder.decode(data: entry.data) {
-                    self.memoryCache.store(image, for: url)
-                    DispatchQueue.main.async {
-                        self.setImage(image, for: url, into: imageView, transition: .none)
-                    }
-                    return
-                }
-            }
-
             if let downloadTask = downloadTask {
                 self.fetcher.cancel(downloadTask.url)
             }
+
+            self.downloadTasks[reference] = DownloadTask(imageView: imageView, url: url)
+            
             self.fetcher.fetch(url, completion: {
                 guard let entry = $0 else {
                     return
