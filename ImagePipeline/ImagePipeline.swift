@@ -33,7 +33,7 @@ public final class ImagePipeline {
         NotificationCenter.default.removeObserver(self, name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
     }
 
-    public func load(_ url: URL, into imageView: UIImageView, transition: Transition = .fadeIn, defaultImage: UIImage? = nil, failureImage: UIImage? = nil) {
+    public func load(_ url: URL, into imageView: UIImageView, transition: Transition = .none, defaultImage: UIImage? = nil, failureImage: UIImage? = nil) {
         if Thread.isMainThread {
             if imageView.image == nil {
                 imageView.image = defaultImage
