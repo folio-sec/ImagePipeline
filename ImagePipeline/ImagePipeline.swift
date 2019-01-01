@@ -1,6 +1,8 @@
 import Foundation
 
 public final class ImagePipeline {
+    public static let shared = ImagePipeline()
+
     private let fetcher: Fetching
     private let decoder: Decoding
     private let diskCache: DataCaching
