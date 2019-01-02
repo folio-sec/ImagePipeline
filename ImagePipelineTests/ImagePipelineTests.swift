@@ -403,20 +403,54 @@ class ImagePipelineTests: XCTestCase {
     }
 
     func testImagePipelineFailure() {
-        let imageView = UIImageView()
-        XCTAssertNil(imageView.image)
+        do {
+            let imageView = UIImageView()
+            XCTAssertNil(imageView.image)
 
-        let defaultImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "200x150", withExtension: "png")!))!
-        let failureImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "c0ffee", withExtension: "png")!))!
+            let defaultImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "200x150", withExtension: "png")!))!
+            let failureImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "c0ffee", withExtension: "png")!))!
 
-        let pipeline = ImagePipeline()
-        pipeline.load(URL(string: "https://example.com/80x60?flag=svk&type=webp&delay=1000")!, into: imageView, transition: .none, defaultImage: defaultImage, failureImage: failureImage)
+            let pipeline = ImagePipeline()
+            pipeline.load(URL(string: "https://example.com/80x60?flag=svk&type=webp&delay=1000")!, into: imageView, transition: .none, defaultImage: defaultImage, failureImage: failureImage)
 
-        XCTAssertEqual(imageView.image, defaultImage)
+            XCTAssertEqual(imageView.image, defaultImage)
 
-        RunLoop.main.run(until: Date(timeIntervalSinceNow: 3))
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 3))
 
-        XCTAssertEqual(imageView.image, failureImage)
+            XCTAssertEqual(imageView.image, failureImage)
+        }
+        do {
+            let imageView = UIImageView()
+            XCTAssertNil(imageView.image)
+
+            let defaultImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "200x150", withExtension: "png")!))!
+            let failureImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "c0ffee", withExtension: "png")!))!
+
+            let pipeline = ImagePipeline()
+            pipeline.load(URL(string: "https://httpbin.org/status/400")!, into: imageView, transition: .none, defaultImage: defaultImage, failureImage: failureImage)
+
+            XCTAssertEqual(imageView.image, defaultImage)
+
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
+
+            XCTAssertEqual(imageView.image, failureImage)
+        }
+        do {
+            let imageView = UIImageView()
+            XCTAssertNil(imageView.image)
+
+            let defaultImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "200x150", withExtension: "png")!))!
+            let failureImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "c0ffee", withExtension: "png")!))!
+
+            let pipeline = ImagePipeline()
+            pipeline.load(URL(string: "https://httpbin.org/status/500")!, into: imageView, transition: .none, defaultImage: defaultImage, failureImage: failureImage)
+
+            XCTAssertEqual(imageView.image, defaultImage)
+
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
+
+            XCTAssertEqual(imageView.image, failureImage)
+        }
     }
 
     func testImagePipelineTTL() {
