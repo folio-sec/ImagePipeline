@@ -426,6 +426,40 @@ class ImagePipelineTests: XCTestCase {
         XCTAssertTrue(isCalled)
     }
 
+    func testImagepipelineDeallocatedBeforeFinished() {
+        weak var weakPipeline: ImagePipeline?
+
+        do {
+            let pipeline = ImagePipeline()
+            weakPipeline = pipeline
+
+            XCTAssertNotNil(weakPipeline)
+
+            let imageView = UIImageView()
+
+            for _ in 0..<100 {
+                pipeline.load(URL(string: "https://satyr.io/200x150?type=webp&delay=1000")!, into: imageView)
+            }
+
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+        }
+
+        XCTAssertNil(weakPipeline)
+
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
+        XCTAssertNil(weakPipeline)
+
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
+        XCTAssertNil(weakPipeline)
+
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
+        XCTAssertNil(weakPipeline)
+    }
+
     class SpyFetcher: Fetching {
         var called: (() -> Void)?
 
