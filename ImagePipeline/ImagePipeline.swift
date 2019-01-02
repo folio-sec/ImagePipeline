@@ -9,9 +9,9 @@ public final class ImagePipeline {
     private let memoryCache: ImageCaching
 
     private let queue = DispatchQueue.init(label: "com.folio-sec.image-pipeline", qos: .userInitiated)
-    private var presenters = [ImageViewReference: Presenter]()
+    private var controllers = [ImageViewReference: ImageViewController]()
 
-    private class Presenter {
+    private class ImageViewController {
         weak var imageView: UIImageView?
         let url: URL
 
@@ -61,12 +61,7 @@ public final class ImagePipeline {
             }
 
             let reference = ImageViewReference(imageView)
-            let presenter = self.presenters[reference]
-            if let presenter = presenter {
-                self.fetcher.cancel(presenter.url)
-            }
-
-            self.presenters[reference] = Presenter(imageView: imageView, url: url)
+            self.controllers[reference] = ImageViewController(imageView: imageView, url: url)
             
             self.fetcher.fetch(url, completion: {
                 guard let entry = $0 else {
@@ -94,16 +89,14 @@ public final class ImagePipeline {
     }
 
     private func setImage(_ image: UIImage?, for url: URL, into imageView: UIImageView, transition: Transition) {
-        if let presenter = presenters[ImageViewReference(imageView)], presenter.url == url {
-            if let imageView = presenter.imageView {
-                switch transition.style {
-                case .none:
+        if let controller = controllers[ImageViewReference(imageView)], controller.imageView != nil, controller.url == url {
+            switch transition.style {
+            case .none:
+                imageView.image = image
+            case .fadeIn(let duration):
+                UIView.transition(with: imageView, duration: duration, options: [.transitionCrossDissolve], animations: {
                     imageView.image = image
-                case .fadeIn(let duration):
-                    UIView.transition(with: imageView, duration: duration, options: [.transitionCrossDissolve], animations: {
-                        imageView.image = image
-                    })
-                }
+                })
             }
         }
     }
