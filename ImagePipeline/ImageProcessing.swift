@@ -43,11 +43,11 @@ public struct ImageResizer: ImageProcessing {
             }
         }
 
-        let width = targetSize.width
-        let height = targetSize.height
+        let width = Int(targetSize.width)
+        let height = Int(targetSize.height)
         let space = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo: CGImageAlphaInfo = isOpaque ? .noneSkipLast : .premultipliedLast
-        guard let context = CGContext(data: nil, width: Int(width), height: Int(height), bitsPerComponent: 8, bytesPerRow: 0, space: space, bitmapInfo: bitmapInfo.rawValue) else {
+        guard let context = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0, space: space, bitmapInfo: bitmapInfo.rawValue) else {
             return image
         }
 
