@@ -4,7 +4,7 @@ public final class ImagePipeline {
     public static let shared = ImagePipeline()
 
     private let fetcher: Fetching
-    private let decoder: Decoding
+    private let decoder: ImageDecoding
     private let diskCache: DataCaching
     private let memoryCache: ImageCaching
 

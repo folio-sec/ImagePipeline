@@ -12,7 +12,7 @@
 		140C334F21D93BD3007BDE61 /* ImagePipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = 140C334121D93BD3007BDE61 /* ImagePipeline.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		140C335921D93BFE007BDE61 /* ImagePipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C335821D93BFE007BDE61 /* ImagePipeline.swift */; };
 		140C335B21D93C08007BDE61 /* Fetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C335A21D93C08007BDE61 /* Fetcher.swift */; };
-		140C335D21D93E0F007BDE61 /* Decoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C335C21D93E0F007BDE61 /* Decoder.swift */; };
+		140C335D21D93E0F007BDE61 /* ImageDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140C335C21D93E0F007BDE61 /* ImageDecoder.swift */; };
 		140C336B21D93F77007BDE61 /* types.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 140C336321D93F06007BDE61 /* types.h */; };
 		140C336C21D93F77007BDE61 /* decode.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 140C336421D93F06007BDE61 /* decode.h */; };
 		140C336E21D93F9E007BDE61 /* libwebpdecoder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 140C336621D93F06007BDE61 /* libwebpdecoder.a */; };
@@ -472,7 +472,7 @@
 		140C334E21D93BD3007BDE61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		140C335821D93BFE007BDE61 /* ImagePipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePipeline.swift; sourceTree = "<group>"; };
 		140C335A21D93C08007BDE61 /* Fetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fetcher.swift; sourceTree = "<group>"; };
-		140C335C21D93E0F007BDE61 /* Decoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decoder.swift; sourceTree = "<group>"; };
+		140C335C21D93E0F007BDE61 /* ImageDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDecoder.swift; sourceTree = "<group>"; };
 		140C336321D93F06007BDE61 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		140C336421D93F06007BDE61 /* decode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = decode.h; sourceTree = "<group>"; };
 		140C336621D93F06007BDE61 /* libwebpdecoder.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwebpdecoder.a; sourceTree = "<group>"; };
@@ -943,7 +943,7 @@
 				140C335821D93BFE007BDE61 /* ImagePipeline.swift */,
 				140C339921DA1493007BDE61 /* Transition.swift */,
 				140C335A21D93C08007BDE61 /* Fetcher.swift */,
-				140C335C21D93E0F007BDE61 /* Decoder.swift */,
+				140C335C21D93E0F007BDE61 /* ImageDecoder.swift */,
 				140C336F21D945CA007BDE61 /* MemoryCache.swift */,
 				140C337121D945D9007BDE61 /* DiskCache.swift */,
 				140C339721D9D47C007BDE61 /* Storage.swift */,
@@ -1946,7 +1946,7 @@
 				140C335921D93BFE007BDE61 /* ImagePipeline.swift in Sources */,
 				140C339821D9D47C007BDE61 /* Storage.swift in Sources */,
 				140C337021D945CA007BDE61 /* MemoryCache.swift in Sources */,
-				140C335D21D93E0F007BDE61 /* Decoder.swift in Sources */,
+				140C335D21D93E0F007BDE61 /* ImageDecoder.swift in Sources */,
 				140C335B21D93C08007BDE61 /* Fetcher.swift in Sources */,
 				140C337221D945D9007BDE61 /* DiskCache.swift in Sources */,
 				140C339A21DA1493007BDE61 /* Transition.swift in Sources */,
