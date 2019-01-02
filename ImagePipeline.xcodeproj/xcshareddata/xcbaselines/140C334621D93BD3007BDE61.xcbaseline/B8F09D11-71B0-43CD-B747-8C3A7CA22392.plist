@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>classNames</key>
+	<dict>
+		<key>PerformanceTests</key>
+		<dict>
+			<key>testDecodingGIFPerformance()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.011912</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Jan 2, 2019 15:32:42</string>
+				</dict>
+			</dict>
+			<key>testDecodingJPEGPerformance()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.012323</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Jan 2, 2019 15:32:42</string>
+				</dict>
+			</dict>
+			<key>testDecodingPNGPerformance()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.0078603</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Jan 2, 2019 15:32:42</string>
+				</dict>
+			</dict>
+			<key>testDecodingWebPPerformance()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.052937</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Jan 2, 2019 15:32:42</string>
+				</dict>
+			</dict>
+		</dict>
+	</dict>
+</dict>
+</plist>
