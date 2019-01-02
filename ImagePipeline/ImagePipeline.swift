@@ -21,7 +21,7 @@ public final class ImagePipeline {
         }
     }
 
-    public init(fetcher: Fetching = Fetcher(), decoder: ImageDecoding = ImageDecoder(), diskCache: DataCaching = DiskCache(), memoryCache: ImageCaching = MemoryCache()) {
+    public init(fetcher: Fetching = Fetcher(), decoder: ImageDecoding = ImageDecoder(), diskCache: DataCaching = DiskCache.shared, memoryCache: ImageCaching = MemoryCache.shared) {
         self.fetcher = fetcher
         self.decoder = decoder
         self.diskCache = diskCache
