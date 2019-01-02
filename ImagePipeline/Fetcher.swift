@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol Fetching {
-    func fetch(_ url: URL, completion: @escaping (CacheEntry?) -> Void, failure: @escaping (Error?) -> Void)
+    func fetch(_ url: URL, completion: @escaping (CacheEntry) -> Void, cancellation: @escaping () -> Void, failure: @escaping (Error?) -> Void)
     func cancel(_ url: URL)
     func cancelAll()
 }
@@ -21,19 +21,22 @@ public final class Fetcher: Fetching {
         session = URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
     }
 
-    public func fetch(_ url: URL, completion: @escaping (CacheEntry?) -> Void, failure: @escaping (Error?) -> Void) {
-        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
-        let task = session.dataTask(with: request) { [weak self] (data, response, error) in
-            guard let self = self else {
-                fatalError("Fetcher has been released")
-            }
+    deinit {
+        session.invalidateAndCancel()
+    }
 
-            self.queue.sync {
-                self.taskExecutor.removeTask(for: url)
+    public func fetch(_ url: URL, completion: @escaping (CacheEntry) -> Void, cancellation: @escaping () -> Void, failure: @escaping (Error?) -> Void) {
+        let queue = self.queue
+        let taskExecutor = self.taskExecutor
+
+        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+        let task = session.dataTask(with: request) { (data, response, error) in
+            queue.sync {
+                taskExecutor.removeTask(for: url)
             }
 
             if let error = error as NSError?, error.code == NSURLErrorCancelled {
-                completion(nil)
+                cancellation()
                 return
             }
 

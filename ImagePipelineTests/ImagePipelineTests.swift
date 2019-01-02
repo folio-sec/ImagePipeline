@@ -8,14 +8,13 @@ class ImagePipelineTests: XCTestCase {
 
         let fetcher = Fetcher()
         fetcher.fetch(URL(string: "https://satyr.io/200x150?type=png")!, completion: {
-            XCTAssertNotNil($0)
-            XCTAssertEqual($0?.contentType, "image/png")
-            if let data = $0?.data {
-                XCTAssertFalse(data.isEmpty)
-            }
+            XCTAssertEqual($0.contentType, "image/png")
+            XCTAssertFalse($0.data.isEmpty)
             ex.fulfill()
+        }, cancellation: {
+            XCTFail("canceled")
         }, failure: { error in
-            XCTFail("download failed: \(error?.localizedDescription ?? "")")
+            XCTFail("failed: \(error?.localizedDescription ?? "")")
         })
 
         waitForExpectations(timeout: 10)
@@ -26,14 +25,13 @@ class ImagePipelineTests: XCTestCase {
 
         let fetcher = Fetcher()
         fetcher.fetch(URL(string: "https://satyr.io/200x150?type=jpg")!, completion: {
-            XCTAssertNotNil($0)
-            XCTAssertEqual($0?.contentType, "image/jpeg")
-            if let data = $0?.data {
-                XCTAssertFalse(data.isEmpty)
-            }
+            XCTAssertEqual($0.contentType, "image/jpeg")
+            XCTAssertFalse($0.data.isEmpty)
             ex.fulfill()
+        }, cancellation: {
+            XCTFail("canceled")
         }, failure: { error in
-            XCTFail("download failed: \(error?.localizedDescription ?? "")")
+            XCTFail("failed: \(error?.localizedDescription ?? "")")
         })
 
         waitForExpectations(timeout: 10)
@@ -44,12 +42,11 @@ class ImagePipelineTests: XCTestCase {
 
         let fetcher = Fetcher()
         fetcher.fetch(URL(string: "https://satyr.io/200x150?type=gif")!, completion: {
-            XCTAssertNotNil($0)
-            XCTAssertEqual($0?.contentType, "image/gif")
-            if let data = $0?.data {
-                XCTAssertFalse(data.isEmpty)
-            }
+            XCTAssertEqual($0.contentType, "image/gif")
+            XCTAssertFalse($0.data.isEmpty)
             ex.fulfill()
+        }, cancellation: {
+            XCTFail("canceled")
         }, failure: { error in
             XCTFail("download failed: \(error?.localizedDescription ?? "")")
         })
@@ -62,17 +59,55 @@ class ImagePipelineTests: XCTestCase {
 
         let fetcher = Fetcher()
         fetcher.fetch(URL(string: "https://satyr.io/200x150?type=webp")!, completion: {
-            XCTAssertNotNil($0)
-            XCTAssertEqual($0?.contentType, "image/webp")
-            if let data = $0?.data {
-                XCTAssertFalse(data.isEmpty)
-            }
+            XCTAssertEqual($0.contentType, "image/webp")
+            XCTAssertFalse($0.data.isEmpty)
             ex.fulfill()
+        }, cancellation: {
+            XCTFail("canceled")
         }, failure: { error in
             XCTFail("download failed: \(error?.localizedDescription ?? "")")
         })
 
         waitForExpectations(timeout: 10)
+    }
+
+    func testDeallocatingWhileFetching() {
+        weak var weakFetcher: Fetcher?
+
+        do {
+            let fetcher = Fetcher()
+            weakFetcher = fetcher
+
+            XCTAssertNotNil(weakFetcher)
+
+            for _ in 0..<100 {
+                fetcher.fetch(URL(string: "https://satyr.io/200x150?type=webp&delay=1000")!, completion: {
+                    XCTAssertEqual($0.contentType, "image/webp")
+                    XCTAssertFalse($0.data.isEmpty)
+                }, cancellation: {
+                    /* Some outstanding tasks are canceled */
+                }, failure: { error in
+                    XCTFail("failed: \(error?.localizedDescription ?? "")")
+                })
+            }
+
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+        }
+
+        XCTAssertNil(weakFetcher)
+
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
+        XCTAssertNil(weakFetcher)
+
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
+        XCTAssertNil(weakFetcher)
+
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
+        XCTAssertNil(weakFetcher)
     }
 
     func testDecodePNG() {
@@ -338,23 +373,23 @@ class ImagePipelineTests: XCTestCase {
         let fetcher = SpyFetcher()
         let pipeline = ImagePipeline(fetcher: fetcher, diskCache: diskCache, memoryCache: memoryCache)
 
-        var called = false
+        var isCalled = false
         fetcher.called = {
-            called = true
+            isCalled = true
         }
         pipeline.load(URL(string: "https://example.com/1")!, into: imageView, transition: .none)
 
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
-        XCTAssertTrue(called)
+        XCTAssertTrue(isCalled)
 
-        called = false
+        isCalled = false
         fetcher.called = {
-            called = true
+            isCalled = true
         }
         pipeline.load(URL(string: "https://example.com/2")!, into: imageView, transition: .none)
 
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
-        XCTAssertTrue(called)
+        XCTAssertTrue(isCalled)
 
         fetcher.called = {
             XCTFail("should load from cache")
@@ -372,29 +407,29 @@ class ImagePipelineTests: XCTestCase {
 
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 2))
 
-        called = false
+        isCalled = false
         fetcher.called = {
-            called = true
+            isCalled = true
         }
         pipeline.load(URL(string: "https://example.com/1")!, into: imageView, transition: .none)
 
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
-        XCTAssertTrue(called)
+        XCTAssertTrue(isCalled)
 
-        called = false
+        isCalled = false
         fetcher.called = {
-            called = true
+            isCalled = true
         }
         pipeline.load(URL(string: "https://example.com/2")!, into: imageView, transition: .none)
 
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
-        XCTAssertTrue(called)
+        XCTAssertTrue(isCalled)
     }
 
     class SpyFetcher: Fetching {
         var called: (() -> Void)?
 
-        func fetch(_ url: URL, completion: @escaping (CacheEntry?) -> Void, failure: @escaping (Error?) -> Void) {
+        func fetch(_ url: URL, completion: @escaping (CacheEntry) -> Void, cancellation: @escaping () -> Void, failure: @escaping (Error?) -> Void) {
             let data = try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "200x150", withExtension: "png")!)
             let now = Date()
             completion(CacheEntry(url: url, data: data, contentType: "image/png", timeToLive: 6, creationDate: now, modificationDate: now))
