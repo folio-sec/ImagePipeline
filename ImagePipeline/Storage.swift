@@ -45,7 +45,7 @@ public class SQLiteStorage: Storage {
                                    """
                                    REPLACE INTO entry
                                        (id, url, data, mime, ttl, created_at, updated_at)
-                                       VALUES
+                                   VALUES
                                        (?,   ?,   ?,    ?,    ?,   ?,          ?);
                                    """,
                                    -1,
@@ -55,7 +55,11 @@ public class SQLiteStorage: Storage {
             try SQLite.execute {
                 sqlite3_prepare_v2(database,
                                    """
-                                   SELECT * FROM entry WHERE id = ?;
+                                   SELECT
+                                       url, data, mime, ttl, created_at, updated_at
+                                   FROM
+                                       entry
+                                   WHERE id = ?;
                                    """,
                                    -1,
                                    &selectStatement,
@@ -105,21 +109,22 @@ public class SQLiteStorage: Storage {
 
         let entry: CacheEntry?
         if sqlite3_step(statement) == SQLITE_ROW {
-            guard let text = sqlite3_column_text(statement, 1), let url = URL(string: String(cString: text)) else {
+            guard let text = sqlite3_column_text(statement, 0), let u = URL(string: String(cString: text)) else {
                 return nil
             }
-            guard let bytes = sqlite3_column_blob(statement, 2) else {
+            guard let bytes = sqlite3_column_blob(statement, 1) else {
                 return nil
             }
-            guard let mime = sqlite3_column_text(statement, 3) else {
+            let byteCount = sqlite3_column_bytes(statement, 1)
+            guard let mime = sqlite3_column_text(statement, 2) else {
                 return nil
             }
-            let ttl = sqlite3_column_int64(statement, 4)
-            let createdAt = sqlite3_column_int64(statement, 5)
-            let updatedAt = sqlite3_column_int64(statement, 6)
+            let ttl = sqlite3_column_int64(statement, 3)
+            let createdAt = sqlite3_column_int64(statement, 4)
+            let updatedAt = sqlite3_column_int64(statement, 5)
 
-            entry = CacheEntry(url: url,
-                               data: Data(bytes: bytes, count: Int(sqlite3_column_bytes(statement, 2))),
+            entry = CacheEntry(url: u,
+                               data: Data(bytes: bytes, count: Int(byteCount)),
                                contentType: String(cString: mime),
                                timeToLive: TimeInterval(ttl),
                                creationDate: Date(timeIntervalSince1970: TimeInterval(createdAt)),
