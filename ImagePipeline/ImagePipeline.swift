@@ -64,22 +64,21 @@ public final class ImagePipeline {
             self.controllers[reference] = ImageViewController(imageView: imageView, url: url)
             
             self.fetcher.fetch(url, completion: {
-                guard let entry = $0 else {
-                    return
-                }
-                guard let image = self.decoder.decode(data: entry.data) else {
+                guard let image = self.decoder.decode(data: $0.data) else {
                     DispatchQueue.main.async {
                         self.setImage(failureImage, for: url, into: imageView, transition: transition)
                     }
                     return
                 }
 
-                self.diskCache.store(entry, for: url)
+                self.diskCache.store($0, for: url)
                 self.memoryCache.store(image, for: url)
 
                 DispatchQueue.main.async {
                     self.setImage(image, for: url, into: imageView, transition: transition)
                 }
+            }, cancellation: {
+                /* do nothing */
             }, failure: { _ in
                 DispatchQueue.main.async {
                     self.setImage(failureImage, for: url, into: imageView, transition: transition)
