@@ -40,8 +40,11 @@ public final class ImagePipeline {
             imageView.image = defaultImage
         }
 
+        let reference = ImageViewReference(imageView)
+        controllers[reference] = ImageViewController(imageView: imageView, url: url)
+
         if let image = memoryCache.load(for: url) {
-            setImage(image, into: imageView, processors: processors)
+            setImage(image, with: url, into: imageView, processors: processors)
             return
         }
         if let entry = diskCache.load(for: url) {
@@ -49,12 +52,12 @@ public final class ImagePipeline {
                 let expirationDate = entry.modificationDate.addingTimeInterval(ttl)
                 if expirationDate  > Date(), let image = decoder.decode(data: entry.data) {
                     self.memoryCache.store(image, for: url)
-                    setImage(image, into: imageView, processors: processors)
+                    setImage(image, with: url, into: imageView, processors: processors)
                     return
                 }
             } else if let image = decoder.decode(data: entry.data) {
                 self.memoryCache.store(image, for: url)
-                setImage(image, into: imageView, processors: processors)
+                setImage(image, with: url, into: imageView, processors: processors)
                 return
             }
         }
@@ -63,9 +66,6 @@ public final class ImagePipeline {
             guard let self = self else {
                 return
             }
-
-            let reference = ImageViewReference(imageView)
-            self.controllers[reference] = ImageViewController(imageView: imageView, url: url)
             
             self.fetcher.fetch(url, completion: { [weak self] in
                 guard let self = self else {
@@ -73,14 +73,14 @@ public final class ImagePipeline {
                 }
                 guard let image = self.decoder.decode(data: $0.data) else {
                     if let failureImage = failureImage {
-                        self.setImage(failureImage, for: url, into: imageView, transition: transition, processors: processors)
+                        self.setImage(failureImage, with: url, into: imageView, transition: transition, processors: processors)
                     }
                     return
                 }
 
                 self.diskCache.store($0, for: url)
                 self.memoryCache.store(image, for: url)
-                self.setImage(image, for: url, into: imageView, transition: transition, processors: processors)
+                self.setImage(image, with: url, into: imageView, transition: transition, processors: processors)
             }, cancellation: {
                 /* do nothing */
             }, failure: { [weak self] _ in
@@ -88,28 +88,30 @@ public final class ImagePipeline {
                     return
                 }
                 if let failureImage = failureImage {
-                    self.setImage(failureImage, for: url, into: imageView, transition: transition, processors: processors)
+                    self.setImage(failureImage, with: url, into: imageView, transition: transition, processors: processors)
                 }
             })
         }
     }
 
-    private func setImage(_ image: UIImage, into imageView: UIImageView, processors: [ImageProcessing]) {
-        if processors.isEmpty {
-            imageView.image = image
-        } else {
-            queue.async {
-                for processor in processors {
-                    let image = processor.process(image: image)
-                    DispatchQueue.main.async {
-                        imageView.image = image
+    private func setImage(_ image: UIImage, with url: URL, into imageView: UIImageView, processors: [ImageProcessing]) {
+        if let controller = controllers[ImageViewReference(imageView)], controller.imageView != nil, controller.url == url {
+            if processors.isEmpty {
+                imageView.image = image
+            } else {
+                queue.async {
+                    for processor in processors {
+                        let image = processor.process(image: image)
+                        DispatchQueue.main.async {
+                            imageView.image = image
+                        }
                     }
                 }
             }
         }
     }
 
-    private func setImage(_ image: UIImage, for url: URL, into imageView: UIImageView, transition: Transition, processors: [ImageProcessing]) {
+    private func setImage(_ image: UIImage, with url: URL, into imageView: UIImageView, transition: Transition, processors: [ImageProcessing]) {
         if let controller = controllers[ImageViewReference(imageView)], controller.imageView != nil, controller.url == url {
             DispatchQueue.main.async {
                 switch transition.style {
