@@ -8,6 +8,8 @@ public protocol ImageCaching {
 }
 
 public final class MemoryCache: ImageCaching {
+    public static let shared = MemoryCache()
+
     public var totalCostLimit: Int {
         get {
             return cache.totalCostLimit

@@ -10,7 +10,9 @@ public protocol DataCaching {
 }
 
 public final class DiskCache: DataCaching {
-    let storage: Storage
+    public static let shared = DiskCache()
+
+    private let storage: Storage
 
     public init(storage: Storage = SQLiteStorage()) {
         self.storage = storage
