@@ -5,6 +5,8 @@ public protocol DataCaching {
     func load(for url: URL) -> CacheEntry?
     func remove(for url: URL)
     func removeAll()
+    func removeOutdated()
+    func compact()
 }
 
 public final class DiskCache: DataCaching {
@@ -28,5 +30,13 @@ public final class DiskCache: DataCaching {
 
     public func removeAll() {
         storage.removeAll()
+    }
+
+    public func removeOutdated() {
+        storage.removeOutdated()
+    }
+
+    public func compact() {
+        storage.compact()
     }
 }

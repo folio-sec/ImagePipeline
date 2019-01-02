@@ -27,10 +27,12 @@ public final class ImagePipeline {
         self.diskCache = diskCache
         self.memoryCache = memoryCache
         NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning(notification:)), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground(notification:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self, name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
     public func load(_ url: URL, into imageView: UIImageView, transition: Transition = .none, defaultImage: UIImage? = nil, failureImage: UIImage? = nil) {
@@ -110,6 +112,12 @@ public final class ImagePipeline {
     @objc
     private func didReceiveMemoryWarning(notification: Notification) {
         memoryCache.removeAll()
+    }
+
+    @objc
+    private func didEnterBackground(notification: Notification) {
+        diskCache.removeOutdated()
+        diskCache.compact()
     }
 
     private class ImageViewReference: Hashable {
