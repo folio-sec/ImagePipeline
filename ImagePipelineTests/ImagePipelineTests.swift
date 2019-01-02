@@ -537,6 +537,7 @@ class ImagePipelineTests: XCTestCase {
             RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
         }
 
+        RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.01))
         XCTAssertNil(weakPipeline)
 
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
