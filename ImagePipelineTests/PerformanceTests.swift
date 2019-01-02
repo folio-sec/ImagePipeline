@@ -135,7 +135,6 @@ class PerformanceTests: XCTestCase {
         var path: String { return tempFile }
     }
 
-
     class FileStorage: Storage {
         let directory: URL
 
@@ -156,6 +155,8 @@ class PerformanceTests: XCTestCase {
 
         func remove(for url: URL) {}
         func removeAll() {}
+        func removeOutdated() {}
+        func compact() {}
 
         func path(for url: URL) -> URL {
             return directory.appendingPathComponent(sha1(string: url.absoluteString))

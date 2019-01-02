@@ -6,6 +6,8 @@ public protocol Storage {
     func load(for url: URL) -> CacheEntry?
     func remove(for url: URL)
     func removeAll()
+    func removeOutdated()
+    func compact()
 }
 
 public protocol FileProvider {
@@ -18,6 +20,8 @@ public class SQLiteStorage: Storage {
     private var selectStatement: OpaquePointer?
     private var deleteStatement: OpaquePointer?
     private var deleteAllStatement: OpaquePointer?
+    private var deleteOutdatedStatement: OpaquePointer?
+    private var vacuumStatement: OpaquePointer?
 
     public init(fileProvider: FileProvider = DefaultFileProvider()) {
         let path = fileProvider.path
@@ -46,7 +50,7 @@ public class SQLiteStorage: Storage {
                                    REPLACE INTO entry
                                        (id, url, data, mime, ttl, created_at, updated_at)
                                    VALUES
-                                       (?,   ?,   ?,    ?,    ?,   ?,          ?);
+                                       (?,  ?,   ?,    ?,    ?,   ?,          ?);
                                    """,
                                    -1,
                                    &replaceStatement,
@@ -81,6 +85,24 @@ public class SQLiteStorage: Storage {
                                    """,
                                    -1,
                                    &deleteAllStatement,
+                                   nil) }
+
+            try SQLite.execute {
+                sqlite3_prepare_v2(database,
+                                   """
+                                   DELETE FROM entry WHERE (updated_at + ttl) < CAST(strftime('%s', 'now') AS INTEGER);
+                                   """,
+                                   -1,
+                                   &deleteOutdatedStatement,
+                                   nil) }
+
+            try SQLite.execute {
+                sqlite3_prepare_v2(database,
+                                   """
+                                   VACUUM;
+                                   """,
+                                   -1,
+                                   &vacuumStatement,
                                    nil) }
         } catch {}
     }
@@ -149,6 +171,22 @@ public class SQLiteStorage: Storage {
 
     public func removeAll() {
         let statement = deleteAllStatement
+        do {
+            try SQLite.executeUpdate { sqlite3_step(statement) }
+            try SQLite.execute { sqlite3_reset(statement) }
+        } catch {}
+    }
+    
+    public func removeOutdated() {
+        let statement = deleteOutdatedStatement
+        do {
+            try SQLite.executeUpdate { sqlite3_step(statement) }
+            try SQLite.execute { sqlite3_reset(statement) }
+        } catch {}
+    }
+
+    public func compact() {
+        let statement = vacuumStatement
         do {
             try SQLite.executeUpdate { sqlite3_step(statement) }
             try SQLite.execute { sqlite3_reset(statement) }
