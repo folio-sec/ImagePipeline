@@ -36,19 +36,19 @@ public final class ImagePipeline {
     public func load(_ url: URL, into imageView: UIImageView, transition: Transition = .none, defaultImage: UIImage? = nil, failureImage: UIImage? = nil) {
         imageView.image = defaultImage
 
-        if let image = self.memoryCache.load(for: url) {
+        if let image = memoryCache.load(for: url) {
             imageView.image = image
             return
         }
-        if let entry = self.diskCache.load(for: url) {
+        if let entry = diskCache.load(for: url) {
             if let ttl = entry.timeToLive {
                 let expirationDate = entry.modificationDate.addingTimeInterval(ttl)
-                if expirationDate  > Date(), let image = self.decoder.decode(data: entry.data) {
+                if expirationDate  > Date(), let image = decoder.decode(data: entry.data) {
                     self.memoryCache.store(image, for: url)
                     imageView.image = image
                     return
                 }
-            } else if let image = self.decoder.decode(data: entry.data) {
+            } else if let image = decoder.decode(data: entry.data) {
                 self.memoryCache.store(image, for: url)
                 imageView.image = image
                 return
@@ -57,13 +57,17 @@ public final class ImagePipeline {
 
         queue.async { [weak self] in
             guard let self = self else {
-                fatalError("Image pipeline has been released")
+                return
             }
 
             let reference = ImageViewReference(imageView)
             self.controllers[reference] = ImageViewController(imageView: imageView, url: url)
             
-            self.fetcher.fetch(url, completion: {
+            self.fetcher.fetch(url, completion: { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 guard let image = self.decoder.decode(data: $0.data) else {
                     DispatchQueue.main.async {
                         self.setImage(failureImage, for: url, into: imageView, transition: transition)
@@ -79,7 +83,10 @@ public final class ImagePipeline {
                 }
             }, cancellation: {
                 /* do nothing */
-            }, failure: { _ in
+            }, failure: { [weak self] _ in
+                guard let self = self else {
+                    return
+                }
                 DispatchQueue.main.async {
                     self.setImage(failureImage, for: url, into: imageView, transition: transition)
                 }
