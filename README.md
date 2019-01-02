@@ -1,3 +1,5 @@
+[![Build Status](https://app.bitrise.io/app/05849474f2d15fa8/status.svg?token=z0BK0SJnKUHzy8tf3zIGYg)](https://app.bitrise.io/app/05849474f2d15fa8)
+
 # ImagePipeline
 Folio Image Pipeline is an image loading and caching framework for iOS clients
 
