@@ -21,7 +21,7 @@ public final class ImagePipeline {
         }
     }
 
-    public init(fetcher: Fetching = Fetcher(), decoder: Decoding = Decoder(), diskCache: DataCaching = DiskCache(), memoryCache: ImageCaching = MemoryCache()) {
+    public init(fetcher: Fetching = Fetcher(), decoder: ImageDecoding = ImageDecoder(), diskCache: DataCaching = DiskCache(), memoryCache: ImageCaching = MemoryCache()) {
         self.fetcher = fetcher
         self.decoder = decoder
         self.diskCache = diskCache
@@ -35,11 +35,13 @@ public final class ImagePipeline {
         NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
-    public func load(_ url: URL, into imageView: UIImageView, transition: Transition = .none, defaultImage: UIImage? = nil, failureImage: UIImage? = nil) {
-        imageView.image = defaultImage
+    public func load(_ url: URL, into imageView: UIImageView, transition: Transition = .none, defaultImage: UIImage? = nil, failureImage: UIImage? = nil, processors: [ImageProcessing] = []) {
+        if let defaultImage = defaultImage {
+            imageView.image = defaultImage
+        }
 
         if let image = memoryCache.load(for: url) {
-            imageView.image = image
+            setImage(image, into: imageView, processors: processors)
             return
         }
         if let entry = diskCache.load(for: url) {
@@ -47,12 +49,12 @@ public final class ImagePipeline {
                 let expirationDate = entry.modificationDate.addingTimeInterval(ttl)
                 if expirationDate  > Date(), let image = decoder.decode(data: entry.data) {
                     self.memoryCache.store(image, for: url)
-                    imageView.image = image
+                    setImage(image, into: imageView, processors: processors)
                     return
                 }
             } else if let image = decoder.decode(data: entry.data) {
                 self.memoryCache.store(image, for: url)
-                imageView.image = image
+                setImage(image, into: imageView, processors: processors)
                 return
             }
         }
@@ -69,42 +71,55 @@ public final class ImagePipeline {
                 guard let self = self else {
                     return
                 }
-
                 guard let image = self.decoder.decode(data: $0.data) else {
-                    DispatchQueue.main.async {
-                        self.setImage(failureImage, for: url, into: imageView, transition: transition)
+                    if let failureImage = failureImage {
+                        self.setImage(failureImage, for: url, into: imageView, transition: transition, processors: processors)
                     }
                     return
                 }
 
                 self.diskCache.store($0, for: url)
                 self.memoryCache.store(image, for: url)
-
-                DispatchQueue.main.async {
-                    self.setImage(image, for: url, into: imageView, transition: transition)
-                }
+                self.setImage(image, for: url, into: imageView, transition: transition, processors: processors)
             }, cancellation: {
                 /* do nothing */
             }, failure: { [weak self] _ in
                 guard let self = self else {
                     return
                 }
-                DispatchQueue.main.async {
-                    self.setImage(failureImage, for: url, into: imageView, transition: transition)
+                if let failureImage = failureImage {
+                    self.setImage(failureImage, for: url, into: imageView, transition: transition, processors: processors)
                 }
             })
         }
     }
 
-    private func setImage(_ image: UIImage?, for url: URL, into imageView: UIImageView, transition: Transition) {
+    private func setImage(_ image: UIImage, into imageView: UIImageView, processors: [ImageProcessing]) {
+        if processors.isEmpty {
+            imageView.image = image
+        } else {
+            queue.async {
+                for processor in processors {
+                    let image = processor.process(image: image)
+                    DispatchQueue.main.async {
+                        imageView.image = image
+                    }
+                }
+            }
+        }
+    }
+
+    private func setImage(_ image: UIImage, for url: URL, into imageView: UIImageView, transition: Transition, processors: [ImageProcessing]) {
         if let controller = controllers[ImageViewReference(imageView)], controller.imageView != nil, controller.url == url {
-            switch transition.style {
-            case .none:
-                imageView.image = image
-            case .fadeIn(let duration):
-                UIView.transition(with: imageView, duration: duration, options: [.transitionCrossDissolve], animations: {
+            DispatchQueue.main.async {
+                switch transition.style {
+                case .none:
                     imageView.image = image
-                })
+                case .fadeIn(let duration):
+                    UIView.transition(with: imageView, duration: duration, options: [.transitionCrossDissolve], animations: {
+                        imageView.image = image
+                    })
+                }
             }
         }
     }

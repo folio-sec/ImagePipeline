@@ -496,6 +496,49 @@ class ImagePipelineTests: XCTestCase {
         }
     }
 
+    func testImageResizer() {
+        let originalImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "1", withExtension: "png")!))!
+
+        let targetSize = CGSize(width: 200, height: 150)
+        let resizer = ImageResizer(targetSize: targetSize)
+        let resizedImage = resizer.process(image: originalImage)!
+
+        XCTAssertEqual(resizedImage.size, targetSize)
+    }
+
+    func testImageResizerAspectFit() {
+        let originalImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "1", withExtension: "png")!))!
+
+        let targetSize = CGSize(width: 400, height: 400)
+        let resizer = ImageResizer(targetSize: targetSize)
+        let resizedImage = resizer.process(image: originalImage)!
+
+        XCTAssertEqual(resizedImage.size, targetSize)
+        assertSnapshot(matching: resizedImage, as: .image)
+    }
+
+    func testImageResizerAspectFill() {
+        let originalImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "1", withExtension: "png")!))!
+
+        let targetSize = CGSize(width: 400, height: 400)
+        let resizer = ImageResizer(targetSize: targetSize, contentMode: .aspectFill)
+        let resizedImage = resizer.process(image: originalImage)!
+
+        XCTAssertEqual(resizedImage.size, targetSize)
+        assertSnapshot(matching: resizedImage, as: .image)
+    }
+
+    func testImageResizerOpaque() {
+        let originalImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "1", withExtension: "png")!))!
+
+        let targetSize = CGSize(width: 400, height: 400)
+        let resizer = ImageResizer(targetSize: targetSize, isOpaque: true, backgroundColor: .white)
+        let resizedImage = resizer.process(image: originalImage)!
+
+        XCTAssertEqual(resizedImage.size, targetSize)
+        assertSnapshot(matching: resizedImage, as: .image)
+    }
+
     func testImagePipelineTTL() {
         let imageView = UIImageView()
         XCTAssertNil(imageView.image)
