@@ -31,28 +31,28 @@ class PerformanceTests: XCTestCase {
     }
 
     func testDecodingPNGPerformance() {
-        let decoder = Decoder()
+        let decoder = ImageDecoder()
         measure {
             pngData.forEach { _ = decoder.decode(data: $0) }
         }
     }
 
     func testDecodingJPEGPerformance() {
-        let decoder = Decoder()
+        let decoder = ImageDecoder()
         measure {
             jpegData.forEach { _ = decoder.decode(data: $0) }
         }
     }
 
     func testDecodingGIFPerformance() {
-        let decoder = Decoder()
+        let decoder = ImageDecoder()
         measure {
             gifData.forEach { _ = decoder.decode(data: $0) }
         }
     }
 
     func testDecodingWebPPerformance() {
-        let decoder = Decoder()
+        let decoder = ImageDecoder()
         measure {
             webpData.forEach { _ = decoder.decode(data: $0) }
         }

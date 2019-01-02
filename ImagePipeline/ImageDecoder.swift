@@ -2,11 +2,11 @@ import Foundation
 import CoreGraphics
 import WebPDecoder
 
-public protocol Decoding {
+public protocol ImageDecoding {
     func decode(data: Data) -> UIImage?
 }
 
-public final class Decoder: Decoding {
+public struct ImageDecoder: ImageDecoding {
     public init() {}
 
     public func decode(data: Data) -> UIImage? {

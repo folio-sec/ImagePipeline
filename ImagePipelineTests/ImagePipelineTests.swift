@@ -113,7 +113,7 @@ class ImagePipelineTests: XCTestCase {
     func testDecodePNG() {
         let fixture = try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "200x150", withExtension: "png")!)
 
-        let decoder = Decoder()
+        let decoder = ImageDecoder()
         guard let image = decoder.decode(data: fixture) else {
             XCTFail("image decode failed" )
             return
@@ -125,7 +125,7 @@ class ImagePipelineTests: XCTestCase {
     func testDecodeJPEG() {
         let fixture = try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "200x150", withExtension: "jpg")!)
 
-        let decoder = Decoder()
+        let decoder = ImageDecoder()
         guard let image = decoder.decode(data: fixture) else {
             XCTFail("image decode failed" )
             return
@@ -137,7 +137,7 @@ class ImagePipelineTests: XCTestCase {
     func testDecodeGIF() {
         let fixture = try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "200x150", withExtension: "gif")!)
 
-        let decoder = Decoder()
+        let decoder = ImageDecoder()
         guard let image = decoder.decode(data: fixture) else {
             XCTFail("image decode failed" )
             return
@@ -149,7 +149,7 @@ class ImagePipelineTests: XCTestCase {
     func testDecodeWebP() {
         let fixture = try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "200x150", withExtension: "webp")!)
 
-        let decoder = Decoder()
+        let decoder = ImageDecoder()
         guard let image = decoder.decode(data: fixture) else {
             XCTFail("image decode failed" )
             return
