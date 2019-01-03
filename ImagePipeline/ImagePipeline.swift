@@ -11,17 +11,7 @@ public final class ImagePipeline {
     private let queue = DispatchQueue.init(label: "com.folio-sec.image-pipeline", qos: .userInitiated)
     private var controllers = [ImageViewReference: ImageViewController]()
 
-    private class ImageViewController {
-        weak var imageView: UIImageView?
-        let url: URL
-
-        init(imageView: UIImageView, url: URL) {
-            self.imageView = imageView
-            self.url = url
-        }
-    }
-
-    public init(fetcher: Fetching = Fetcher(), decoder: Decoding = Decoder(), diskCache: DataCaching = DiskCache(), memoryCache: ImageCaching = MemoryCache()) {
+    public init(fetcher: Fetching = Fetcher(), decoder: ImageDecoding = ImageDecoder(), diskCache: DataCaching = DiskCache.shared, memoryCache: ImageCaching = MemoryCache.shared) {
         self.fetcher = fetcher
         self.decoder = decoder
         self.diskCache = diskCache
@@ -35,24 +25,53 @@ public final class ImagePipeline {
         NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
-    public func load(_ url: URL, into imageView: UIImageView, transition: Transition = .none, defaultImage: UIImage? = nil, failureImage: UIImage? = nil) {
-        imageView.image = defaultImage
+    public func load(_ url: URL, into imageView: UIImageView, transition: Transition = .none, defaultImage: UIImage? = nil, failureImage: UIImage? = nil, processors: [ImageProcessing] = []) {
+        if let defaultImage = defaultImage {
+            imageView.image = defaultImage
+        }
+
+        let reference = ImageViewReference(imageView)
+        let controller: ImageViewController
+        if let c = controllers[reference] {
+            controller = c
+        } else {
+            controller = ImageViewController(reference)
+            controllers[reference] = controller
+        }
+        controller.cancelOutstandingTasks()
+        let taskId = controller.currentTaskId
 
         if let image = memoryCache.load(for: url) {
-            imageView.image = image
-            return
-        }
-        if let entry = diskCache.load(for: url) {
-            if let ttl = entry.timeToLive {
-                let expirationDate = entry.modificationDate.addingTimeInterval(ttl)
-                if expirationDate  > Date(), let image = decoder.decode(data: entry.data) {
-                    self.memoryCache.store(image, for: url)
-                    imageView.image = image
+            processImage(image, processors: processors) {
+                guard taskId == controller.currentTaskId else {
                     return
                 }
-            } else if let image = decoder.decode(data: entry.data) {
+                controller.showImage($0, transition: .none)
+            }
+            return
+        }
+
+        func isTTLExpired(ttl: TimeInterval?, date: Date) -> Bool {
+            if let ttl = ttl {
+                return date.addingTimeInterval(ttl) < Date()
+            } else {
+                return false
+            }
+        }
+
+        if let entry = diskCache.load(for: url) {
+            if !isTTLExpired(ttl: entry.timeToLive, date: entry.modificationDate), let image = decoder.decode(data: entry.data) {
                 self.memoryCache.store(image, for: url)
-                imageView.image = image
+
+                guard taskId == controller.currentTaskId else {
+                    return
+                }
+                processImage(image, processors: processors) {
+                    guard taskId == controller.currentTaskId else {
+                        return
+                    }
+                    controller.showImage($0, transition: .none)
+                }
                 return
             }
         }
@@ -61,18 +80,17 @@ public final class ImagePipeline {
             guard let self = self else {
                 return
             }
-
-            let reference = ImageViewReference(imageView)
-            self.controllers[reference] = ImageViewController(imageView: imageView, url: url)
             
             self.fetcher.fetch(url, completion: { [weak self] in
                 guard let self = self else {
                     return
                 }
-
                 guard let image = self.decoder.decode(data: $0.data) else {
-                    DispatchQueue.main.async {
-                        self.setImage(failureImage, for: url, into: imageView, transition: transition)
+                    if let failureImage = failureImage {
+                        guard taskId == controller.currentTaskId else {
+                            return
+                        }
+                        self.showImage(failureImage) { controller.showImage($0, transition: transition) }
                     }
                     return
                 }
@@ -80,32 +98,36 @@ public final class ImagePipeline {
                 self.diskCache.store($0, for: url)
                 self.memoryCache.store(image, for: url)
 
-                DispatchQueue.main.async {
-                    self.setImage(image, for: url, into: imageView, transition: transition)
+                guard taskId == controller.currentTaskId else {
+                    return
+                }
+                self.processImage(image, processors: processors) {
+                    guard taskId == controller.currentTaskId else {
+                        return
+                    }
+                    controller.showImage($0, transition: transition)
                 }
             }, cancellation: {
                 /* do nothing */
             }, failure: { [weak self] _ in
-                guard let self = self else {
-                    return
-                }
-                DispatchQueue.main.async {
-                    self.setImage(failureImage, for: url, into: imageView, transition: transition)
+                if let failureImage = failureImage {
+                    guard taskId == controller.currentTaskId else {
+                        return
+                    }
+                    self?.showImage(failureImage) { controller.showImage($0, transition: transition) }
                 }
             })
         }
     }
 
-    private func setImage(_ image: UIImage?, for url: URL, into imageView: UIImageView, transition: Transition) {
-        if let controller = controllers[ImageViewReference(imageView)], controller.imageView != nil, controller.url == url {
-            switch transition.style {
-            case .none:
-                imageView.image = image
-            case .fadeIn(let duration):
-                UIView.transition(with: imageView, duration: duration, options: [.transitionCrossDissolve], animations: {
-                    imageView.image = image
-                })
-            }
+    private func showImage(_ image: UIImage, completion: @escaping (UIImage) -> Void) {
+        DispatchQueue.main.async { completion(image) }
+    }
+
+    private func processImage(_ image: UIImage, processors: [ImageProcessing], completion: @escaping (UIImage) -> Void) {
+        queue.async {
+            let resultImage = processors.reduce(image) { $1.process(image: $0) }
+            DispatchQueue.main.async { completion(resultImage) }
         }
     }
 
@@ -119,22 +141,48 @@ public final class ImagePipeline {
         diskCache.removeOutdated()
         diskCache.compact()
     }
+}
 
-    private class ImageViewReference: Hashable {
-        weak var imageView: UIImageView?
-        let objectIdentifier: ObjectIdentifier
+private class ImageViewReference: Hashable {
+    weak var imageView: UIImageView?
+    let objectIdentifier: ObjectIdentifier
 
-        init(_ imageView: UIImageView) {
-            self.imageView = imageView
-            objectIdentifier = ObjectIdentifier(imageView)
+    init(_ imageView: UIImageView) {
+        self.imageView = imageView
+        objectIdentifier = ObjectIdentifier(imageView)
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(objectIdentifier)
+    }
+
+    static func == (lhs: ImageViewReference, rhs: ImageViewReference) -> Bool {
+        return lhs.objectIdentifier == rhs.objectIdentifier
+    }
+}
+
+private class ImageViewController {
+    private(set) weak var reference: ImageViewReference?
+    private(set) var currentTaskId = UUID()
+
+    init(_ reference: ImageViewReference) {
+        self.reference = reference
+    }
+
+    func showImage(_ image: UIImage, transition: Transition) {
+        switch transition.style {
+        case .none:
+            reference?.imageView?.image = image
+        case .fadeIn(let duration):
+            if let imageView = reference?.imageView {
+                UIView.transition(with: imageView, duration: duration, options: [.transitionCrossDissolve], animations: {
+                    imageView.image = image
+                })
+            }
         }
+    }
 
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(objectIdentifier)
-        }
-
-        static func == (lhs: ImagePipeline.ImageViewReference, rhs: ImagePipeline.ImageViewReference) -> Bool {
-            return lhs.objectIdentifier == rhs.objectIdentifier
-        }
+    func cancelOutstandingTasks() {
+        currentTaskId = UUID()
     }
 }
