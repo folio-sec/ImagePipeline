@@ -501,7 +501,7 @@ class ImagePipelineTests: XCTestCase {
 
         let targetSize = CGSize(width: 200, height: 150)
         let resizer = ImageResizer(targetSize: targetSize)
-        let resizedImage = resizer.process(image: originalImage)!
+        let resizedImage = resizer.process(image: originalImage)
 
         XCTAssertEqual(resizedImage.size, targetSize)
     }
@@ -511,7 +511,7 @@ class ImagePipelineTests: XCTestCase {
 
         let targetSize = CGSize(width: 400, height: 400)
         let resizer = ImageResizer(targetSize: targetSize)
-        let resizedImage = resizer.process(image: originalImage)!
+        let resizedImage = resizer.process(image: originalImage)
 
         XCTAssertEqual(resizedImage.size, targetSize)
         assertSnapshot(matching: resizedImage, as: .image)
@@ -522,7 +522,7 @@ class ImagePipelineTests: XCTestCase {
 
         let targetSize = CGSize(width: 400, height: 400)
         let resizer = ImageResizer(targetSize: targetSize, contentMode: .aspectFill)
-        let resizedImage = resizer.process(image: originalImage)!
+        let resizedImage = resizer.process(image: originalImage)
 
         XCTAssertEqual(resizedImage.size, targetSize)
         assertSnapshot(matching: resizedImage, as: .image)
@@ -533,7 +533,7 @@ class ImagePipelineTests: XCTestCase {
 
         let targetSize = CGSize(width: 400, height: 400)
         let resizer = ImageResizer(targetSize: targetSize, isOpaque: true, backgroundColor: .white)
-        let resizedImage = resizer.process(image: originalImage)!
+        let resizedImage = resizer.process(image: originalImage)
 
         XCTAssertEqual(resizedImage.size, targetSize)
         assertSnapshot(matching: resizedImage, as: .image)

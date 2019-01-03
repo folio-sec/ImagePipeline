@@ -2,7 +2,7 @@ import Foundation
 import AVFoundation
 
 public protocol ImageProcessing {
-    func process(image: UIImage) -> UIImage?
+    func process(image: UIImage) -> UIImage
 }
 
 public struct ImageResizer: ImageProcessing {
@@ -23,7 +23,7 @@ public struct ImageResizer: ImageProcessing {
         self.backgroundColor = backgroundColor
     }
 
-    public func process(image: UIImage) -> UIImage? {
+    public func process(image: UIImage) -> UIImage {
         guard let cgImage = image.cgImage else {
             return image
         }
