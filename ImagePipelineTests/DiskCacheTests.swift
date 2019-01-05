@@ -68,7 +68,7 @@ class DiskCacheTests: XCTestCase {
     }
 
     func testRemoveOutdated() {
-        let tempFile = (NSTemporaryDirectory() as NSString).appendingPathComponent("temp.sqlite")
+        let tempFile = (NSTemporaryDirectory() as NSString).appendingPathComponent("temp-\(UUID().uuidString).sqlite")
         let cache = DiskCache(storage: SQLiteStorage(fileProvider: TemporaryFileProvider(tempFile: tempFile)))
 
         var keys = [URL]()
@@ -108,5 +108,7 @@ class DiskCacheTests: XCTestCase {
 
         let compactionSize = try! FileManager().attributesOfItem(atPath: tempFile)[FileAttributeKey.size] as! Int64
         XCTAssertLessThan(compactionSize, size)
+
+        try! FileManager().removeItem(atPath: tempFile)
     }
 }

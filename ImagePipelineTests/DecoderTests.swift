@@ -1,6 +1,6 @@
 import XCTest
-@testable import ImagePipeline
 import SnapshotTesting
+@testable import ImagePipeline
 
 class DecoderTests: XCTestCase {
     func testDecodePNG() {
