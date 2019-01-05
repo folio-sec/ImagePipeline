@@ -43,33 +43,19 @@ public final class ImagePipeline {
 
         if let image = memoryCache.load(for: url) {
             processImage(image, processors: processors) {
-                guard taskId == controller.currentTaskId else {
-                    return
-                }
+                guard taskId == controller.currentTaskId else { return }
                 controller.showImage($0, transition: .none)
             }
             return
-        }
-
-        func isTTLExpired(ttl: TimeInterval?, date: Date) -> Bool {
-            if let ttl = ttl {
-                return date.addingTimeInterval(ttl) < Date()
-            } else {
-                return false
-            }
         }
 
         if let entry = diskCache.load(for: url) {
             if !isTTLExpired(ttl: entry.timeToLive, date: entry.modificationDate), let image = decoder.decode(data: entry.data) {
                 self.memoryCache.store(image, for: url)
 
-                guard taskId == controller.currentTaskId else {
-                    return
-                }
+                guard taskId == controller.currentTaskId else { return }
                 processImage(image, processors: processors) {
-                    guard taskId == controller.currentTaskId else {
-                        return
-                    }
+                    guard taskId == controller.currentTaskId else { return }
                     controller.showImage($0, transition: .none)
                 }
                 return
@@ -77,19 +63,14 @@ public final class ImagePipeline {
         }
 
         queue.async { [weak self] in
-            guard let self = self else {
-                return
-            }
+            guard let self = self else { return }
             
             self.fetcher.fetch(url, completion: { [weak self] in
-                guard let self = self else {
-                    return
-                }
+                guard let self = self else { return }
+
                 guard let image = self.decoder.decode(data: $0.data) else {
                     if let failureImage = failureImage {
-                        guard taskId == controller.currentTaskId else {
-                            return
-                        }
+                        guard taskId == controller.currentTaskId else { return }
                         self.showImage(failureImage) { controller.showImage($0, transition: transition) }
                     }
                     return
@@ -98,22 +79,16 @@ public final class ImagePipeline {
                 self.diskCache.store($0, for: url)
                 self.memoryCache.store(image, for: url)
 
-                guard taskId == controller.currentTaskId else {
-                    return
-                }
+                guard taskId == controller.currentTaskId else { return }
                 self.processImage(image, processors: processors) {
-                    guard taskId == controller.currentTaskId else {
-                        return
-                    }
+                    guard taskId == controller.currentTaskId else { return }
                     controller.showImage($0, transition: transition)
                 }
             }, cancellation: {
                 /* do nothing */
             }, failure: { [weak self] _ in
                 if let failureImage = failureImage {
-                    guard taskId == controller.currentTaskId else {
-                        return
-                    }
+                    guard taskId == controller.currentTaskId else { return }
                     self?.showImage(failureImage) { controller.showImage($0, transition: transition) }
                 }
             })
@@ -131,6 +106,14 @@ public final class ImagePipeline {
         }
     }
 
+    private func isTTLExpired(ttl: TimeInterval?, date: Date) -> Bool {
+        if let ttl = ttl {
+            return date.addingTimeInterval(ttl) < Date()
+        } else {
+            return false
+        }
+    }
+
     @objc
     private func didReceiveMemoryWarning(notification: Notification) {
         memoryCache.removeAll()
@@ -145,7 +128,7 @@ public final class ImagePipeline {
 
 private class ImageViewReference: Hashable {
     weak var imageView: UIImageView?
-    let objectIdentifier: ObjectIdentifier
+    private let objectIdentifier: ObjectIdentifier
 
     init(_ imageView: UIImageView) {
         self.imageView = imageView

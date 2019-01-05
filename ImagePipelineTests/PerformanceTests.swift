@@ -130,11 +130,6 @@ class PerformanceTests: XCTestCase {
         print(loaded.count)
     }
 
-    struct TemporaryFileProvider: FileProvider {
-        let tempFile: String
-        var path: String { return tempFile }
-    }
-
     class FileStorage: Storage {
         let directory: URL
 
