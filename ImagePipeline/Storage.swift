@@ -26,24 +26,16 @@ public class SQLiteStorage: Storage {
     public init(fileProvider: FileProvider = DefaultFileProvider()) {
         let path = fileProvider.path
         do {
-            try SQLite.execute { sqlite3_open_v2(path, &database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, nil) }
-            try SQLite.execute {
-                sqlite3_exec(database,
-                             """
-                             CREATE TABLE IF NOT EXISTS entry (
-                                 id TEXT NOT NULL PRIMARY KEY,
-                                 url TEXT NOT NULL,
-                                 data BLOB NOT NULL,
-                                 mime TEXT,
-                                 ttl INTEGER,
-                                 created_at INTEGER NOT NULL,
-                                 updated_at INTEGER NOT NULL
-                             );
-                             """,
-                             nil,
-                             nil,
-                             nil) }
-
+            try createOrOpenDatabase(path: path)
+        } catch {
+            do {
+                try FileManager().removeItem(atPath: path)
+                try createOrOpenDatabase(path: path)
+            } catch {
+                return
+            }
+        }
+        do {
             try SQLite.execute {
                 sqlite3_prepare_v2(database,
                                    """
@@ -191,6 +183,26 @@ public class SQLiteStorage: Storage {
             try SQLite.executeUpdate { sqlite3_step(statement) }
             try SQLite.execute { sqlite3_reset(statement) }
         } catch {}
+    }
+
+    private func createOrOpenDatabase(path: String) throws {
+        try SQLite.execute { sqlite3_open_v2(path, &database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, nil) }
+        try SQLite.execute {
+            sqlite3_exec(database,
+                         """
+                             CREATE TABLE IF NOT EXISTS entry (
+                                 id TEXT NOT NULL PRIMARY KEY,
+                                 url TEXT NOT NULL,
+                                 data BLOB NOT NULL,
+                                 mime TEXT,
+                                 ttl INTEGER,
+                                 created_at INTEGER NOT NULL,
+                                 updated_at INTEGER NOT NULL
+                             );
+                             """,
+                         nil,
+                         nil,
+                         nil) }
     }
 
     private enum SQLite {
