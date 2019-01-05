@@ -31,7 +31,7 @@ override func collectionView(_ collectionView: UICollectionView, cellForItemAt i
 
 ## Supported content types
 
-- ✅ PNG
-- ✅ JPEG 
-- ✅ GIF
-- ✅ WebP
+✅ PNG  
+✅ JPEG  
+✅ GIF  
+✅ WebP  
