@@ -6,14 +6,24 @@
 	<dict>
 		<key>PerformanceTests</key>
 		<dict>
+			<key>testBlurFilterPerformance()</key>
+			<dict>
+				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
+				<dict>
+					<key>baselineAverage</key>
+					<real>0.019276</real>
+					<key>baselineIntegrationDisplayName</key>
+					<string>Jan 6, 2019 2:43:14</string>
+				</dict>
+			</dict>
 			<key>testDecodingGIFPerformance()</key>
 			<dict>
 				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>0.0099758</real>
+					<real>0.011588</real>
 					<key>baselineIntegrationDisplayName</key>
-					<string>Jan 2, 2019 16:22:21</string>
+					<string>Jan 6, 2019 2:43:14</string>
 				</dict>
 			</dict>
 			<key>testDecodingJPEGPerformance()</key>
@@ -21,9 +31,9 @@
 				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>0.010287</real>
+					<real>0.010796</real>
 					<key>baselineIntegrationDisplayName</key>
-					<string>Jan 2, 2019 16:22:21</string>
+					<string>Jan 6, 2019 2:43:14</string>
 				</dict>
 			</dict>
 			<key>testDecodingPNGPerformance()</key>
@@ -31,9 +41,9 @@
 				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>0.00678</real>
+					<real>0.0069959</real>
 					<key>baselineIntegrationDisplayName</key>
-					<string>Jan 2, 2019 16:22:21</string>
+					<string>Jan 6, 2019 2:43:14</string>
 				</dict>
 			</dict>
 			<key>testDecodingWebPPerformance()</key>
@@ -41,9 +51,9 @@
 				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>0.049123</real>
+					<real>0.051501</real>
 					<key>baselineIntegrationDisplayName</key>
-					<string>Jan 2, 2019 16:22:21</string>
+					<string>Jan 6, 2019 2:43:14</string>
 				</dict>
 			</dict>
 			<key>testFileStorageLoadPerformance()</key>
@@ -51,9 +61,9 @@
 				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>0.01307</real>
+					<real>0.012978</real>
 					<key>baselineIntegrationDisplayName</key>
-					<string>Jan 2, 2019 16:22:21</string>
+					<string>Jan 6, 2019 2:43:14</string>
 				</dict>
 			</dict>
 			<key>testFileStorageSavePerformance()</key>
@@ -61,9 +71,9 @@
 				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>0.042621</real>
+					<real>0.040256</real>
 					<key>baselineIntegrationDisplayName</key>
-					<string>Jan 2, 2019 16:22:21</string>
+					<string>Jan 6, 2019 2:43:14</string>
 				</dict>
 			</dict>
 			<key>testSQLiteStorageLoadPerformance()</key>
@@ -71,9 +81,9 @@
 				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>0.0054627</real>
+					<real>0.0064171</real>
 					<key>baselineIntegrationDisplayName</key>
-					<string>Jan 2, 2019 16:22:21</string>
+					<string>Jan 6, 2019 2:43:14</string>
 				</dict>
 			</dict>
 			<key>testSQLiteStorageSavePerformance()</key>
@@ -81,9 +91,9 @@
 				<key>com.apple.XCTPerformanceMetric_WallClockTime</key>
 				<dict>
 					<key>baselineAverage</key>
-					<real>0.092066</real>
+					<real>0.078106</real>
 					<key>baselineIntegrationDisplayName</key>
-					<string>Jan 2, 2019 16:22:21</string>
+					<string>Jan 6, 2019 2:43:14</string>
 				</dict>
 			</dict>
 		</dict>

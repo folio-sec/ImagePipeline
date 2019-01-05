@@ -433,6 +433,10 @@
 		14C3A6CB21E0709C00317536 /* DiskCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C3A6CA21E0709C00317536 /* DiskCacheTests.swift */; };
 		14C3A6CD21E070F100317536 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C3A6CC21E070F100317536 /* TestHelper.swift */; };
 		14C3A6CF21E076B100317536 /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C3A6CE21E076B100317536 /* StorageTests.swift */; };
+		14C3A6EF21E0AB1000317536 /* ImageResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C3A6EE21E0AB1000317536 /* ImageResizer.swift */; };
+		14C3A6F121E0AB3F00317536 /* BlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C3A6F021E0AB3F00317536 /* BlurFilter.swift */; };
+		14C3A6F921E10B6C00317536 /* ImageProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C3A6F821E10B6C00317536 /* ImageProcessorTests.swift */; };
+		14C3A6FB21E10EE300317536 /* resize.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 14C3A6FA21E10EE300317536 /* resize.jpeg */; };
 		14DA3B8021DCE79400B5E268 /* ImageProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DA3B7F21DCE79400B5E268 /* ImageProcessing.swift */; };
 /* End PBXBuildFile section */
 
@@ -905,6 +909,10 @@
 		14C3A6CA21E0709C00317536 /* DiskCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCacheTests.swift; sourceTree = "<group>"; };
 		14C3A6CC21E070F100317536 /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
 		14C3A6CE21E076B100317536 /* StorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
+		14C3A6EE21E0AB1000317536 /* ImageResizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizer.swift; sourceTree = "<group>"; };
+		14C3A6F021E0AB3F00317536 /* BlurFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurFilter.swift; sourceTree = "<group>"; };
+		14C3A6F821E10B6C00317536 /* ImageProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessorTests.swift; sourceTree = "<group>"; };
+		14C3A6FA21E10EE300317536 /* resize.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = resize.jpeg; sourceTree = "<group>"; };
 		14DA3B7F21DCE79400B5E268 /* ImageProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -959,6 +967,8 @@
 				140C335A21D93C08007BDE61 /* Fetcher.swift */,
 				140C335C21D93E0F007BDE61 /* ImageDecoder.swift */,
 				14DA3B7F21DCE79400B5E268 /* ImageProcessing.swift */,
+				14C3A6EE21E0AB1000317536 /* ImageResizer.swift */,
+				14C3A6F021E0AB3F00317536 /* BlurFilter.swift */,
 				140C336F21D945CA007BDE61 /* MemoryCache.swift */,
 				140C337121D945D9007BDE61 /* DiskCache.swift */,
 				140C339721D9D47C007BDE61 /* Storage.swift */,
@@ -977,6 +987,7 @@
 				14C3A6C821E0706000317536 /* MemoryCacheTests.swift */,
 				14C3A6CA21E0709C00317536 /* DiskCacheTests.swift */,
 				14C3A6CE21E076B100317536 /* StorageTests.swift */,
+				14C3A6F821E10B6C00317536 /* ImageProcessorTests.swift */,
 				140C334C21D93BD3007BDE61 /* ImagePipelineTests.swift */,
 				14364E5421DC8CC500616F6C /* PerformanceTests.swift */,
 				14C3A6CC21E070F100317536 /* TestHelper.swift */,
@@ -1446,6 +1457,7 @@
 				1436528721DC917D00616F6C /* 200x150.webp */,
 				143652AC21DC918300616F6C /* c0ffee.png */,
 				143651D221DC916200616F6C /* c0ffee.webp */,
+				14C3A6FA21E10EE300317536 /* resize.jpeg */,
 			);
 			path = Fixtures;
 			sourceTree = "<group>";
@@ -1659,6 +1671,7 @@
 				143653CE21DC919600616F6C /* 70.webp in Resources */,
 				1436544721DC919600616F6C /* 93.gif in Resources */,
 				1436542621DC919600616F6C /* 66.jpg in Resources */,
+				14C3A6FB21E10EE300317536 /* resize.jpeg in Resources */,
 				1436533521DC919600616F6C /* 13.webp in Resources */,
 				143653D821DC919600616F6C /* 36.webp in Resources */,
 				1436535221DC919600616F6C /* 60.png in Resources */,
@@ -1966,8 +1979,10 @@
 			files = (
 				140C335921D93BFE007BDE61 /* ImagePipeline.swift in Sources */,
 				140C339821D9D47C007BDE61 /* Storage.swift in Sources */,
+				14C3A6EF21E0AB1000317536 /* ImageResizer.swift in Sources */,
 				140C337021D945CA007BDE61 /* MemoryCache.swift in Sources */,
 				140C335D21D93E0F007BDE61 /* ImageDecoder.swift in Sources */,
+				14C3A6F121E0AB3F00317536 /* BlurFilter.swift in Sources */,
 				140C335B21D93C08007BDE61 /* Fetcher.swift in Sources */,
 				14DA3B8021DCE79400B5E268 /* ImageProcessing.swift in Sources */,
 				140C337221D945D9007BDE61 /* DiskCache.swift in Sources */,
@@ -1987,6 +2002,7 @@
 				14C3A6C921E0706000317536 /* MemoryCacheTests.swift in Sources */,
 				14C3A6CF21E076B100317536 /* StorageTests.swift in Sources */,
 				14C3A6C721E0701300317536 /* DecoderTests.swift in Sources */,
+				14C3A6F921E10B6C00317536 /* ImageProcessorTests.swift in Sources */,
 				140C334D21D93BD3007BDE61 /* ImagePipelineTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

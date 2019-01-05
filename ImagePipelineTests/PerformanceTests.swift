@@ -58,6 +58,16 @@ class PerformanceTests: XCTestCase {
         }
     }
 
+    func testBlurFilterPerformance() {
+        let originalImage = UIImage(data: try! Data(contentsOf: Bundle(for: type(of: self)).url(forResource: "resize", withExtension: "jpeg")!))!
+
+        measure {
+            let filter = BlurFilter(style: .dark)
+            let image = filter.process(image: originalImage)
+            XCTAssertEqual(image.size, originalImage.size)
+        }
+    }
+
     func testSQLiteStorageSavePerformance() {
         let diskCache = DiskCache(storage: SQLiteStorage(fileProvider: TemporaryFileProvider(tempFile: tempFile)))
 
@@ -103,8 +113,6 @@ class PerformanceTests: XCTestCase {
         measure {
             keys.forEach { loaded.append(diskCache.load(for: $0)!) }
         }
-
-        print(loaded.count)
     }
 
     func testFileStorageLoadPerformance() {
@@ -126,8 +134,6 @@ class PerformanceTests: XCTestCase {
         measure {
             keys.forEach { loaded.append(diskCache.load(for: $0)!) }
         }
-
-        print(loaded.count)
     }
 
     class FileStorage: Storage {

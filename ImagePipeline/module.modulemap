@@ -9,4 +9,3 @@ module WebPDecoder {
     header "include/webp/decode.h"
     header "include/webp/types.h"
 }
-
