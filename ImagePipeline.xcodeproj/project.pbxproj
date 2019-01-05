@@ -432,6 +432,7 @@
 		14C3A6C921E0706000317536 /* MemoryCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C3A6C821E0706000317536 /* MemoryCacheTests.swift */; };
 		14C3A6CB21E0709C00317536 /* DiskCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C3A6CA21E0709C00317536 /* DiskCacheTests.swift */; };
 		14C3A6CD21E070F100317536 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C3A6CC21E070F100317536 /* TestHelper.swift */; };
+		14C3A6CF21E076B100317536 /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C3A6CE21E076B100317536 /* StorageTests.swift */; };
 		14DA3B8021DCE79400B5E268 /* ImageProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DA3B7F21DCE79400B5E268 /* ImageProcessing.swift */; };
 /* End PBXBuildFile section */
 
@@ -903,6 +904,7 @@
 		14C3A6C821E0706000317536 /* MemoryCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCacheTests.swift; sourceTree = "<group>"; };
 		14C3A6CA21E0709C00317536 /* DiskCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCacheTests.swift; sourceTree = "<group>"; };
 		14C3A6CC21E070F100317536 /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
+		14C3A6CE21E076B100317536 /* StorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
 		14DA3B7F21DCE79400B5E268 /* ImageProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcessing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -974,6 +976,7 @@
 				14C3A6C621E0701300317536 /* DecoderTests.swift */,
 				14C3A6C821E0706000317536 /* MemoryCacheTests.swift */,
 				14C3A6CA21E0709C00317536 /* DiskCacheTests.swift */,
+				14C3A6CE21E076B100317536 /* StorageTests.swift */,
 				140C334C21D93BD3007BDE61 /* ImagePipelineTests.swift */,
 				14364E5421DC8CC500616F6C /* PerformanceTests.swift */,
 				14C3A6CC21E070F100317536 /* TestHelper.swift */,
@@ -1982,6 +1985,7 @@
 				14C3A6CD21E070F100317536 /* TestHelper.swift in Sources */,
 				14C3A6C521E06FAC00317536 /* FetcherTests.swift in Sources */,
 				14C3A6C921E0706000317536 /* MemoryCacheTests.swift in Sources */,
+				14C3A6CF21E076B100317536 /* StorageTests.swift in Sources */,
 				14C3A6C721E0701300317536 /* DecoderTests.swift in Sources */,
 				140C334D21D93BD3007BDE61 /* ImagePipelineTests.swift in Sources */,
 			);

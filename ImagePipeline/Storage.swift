@@ -23,80 +23,23 @@ public class SQLiteStorage: Storage {
     private var deleteOutdatedStatement: OpaquePointer?
     private var vacuumStatement: OpaquePointer?
 
+    private static var schemaVersion = 0
+
     public init(fileProvider: FileProvider = DefaultFileProvider()) {
         let path = fileProvider.path
         do {
-            try createOrOpenDatabase(path: path)
+            try openDatabase(path: path)
         } catch {
             do {
+                try closeDatabase()
                 try FileManager().removeItem(atPath: path)
-                try createOrOpenDatabase(path: path)
-            } catch {
-                return
-            }
+                try openDatabase(path: path)
+            } catch {}
         }
-        do {
-            try SQLite.execute {
-                sqlite3_prepare_v2(database,
-                                   """
-                                   REPLACE INTO entry
-                                       (id, url, data, mime, ttl, created_at, updated_at)
-                                   VALUES
-                                       (?,  ?,   ?,    ?,    ?,   ?,          ?);
-                                   """,
-                                   -1,
-                                   &replaceStatement,
-                                   nil) }
+    }
 
-            try SQLite.execute {
-                sqlite3_prepare_v2(database,
-                                   """
-                                   SELECT
-                                       url, data, mime, ttl, created_at, updated_at
-                                   FROM
-                                       entry
-                                   WHERE id = ?;
-                                   """,
-                                   -1,
-                                   &selectStatement,
-                                   nil) }
-
-            try SQLite.execute {
-                sqlite3_prepare_v2(database,
-                                   """
-                                   DELETE FROM entry WHERE id = ?;
-                                   """,
-                                   -1,
-                                   &deleteStatement,
-                                   nil) }
-
-            try SQLite.execute {
-                sqlite3_prepare_v2(database,
-                                   """
-                                   DELETE FROM entry;
-                                   """,
-                                   -1,
-                                   &deleteAllStatement,
-                                   nil) }
-
-            try SQLite.execute {
-                sqlite3_prepare_v2(database,
-                                   """
-                                   DELETE FROM entry WHERE (updated_at + ttl) < CAST(strftime('%s', 'now') AS INTEGER);
-                                   """,
-                                   -1,
-                                   &deleteOutdatedStatement,
-                                   nil) }
-
-            try SQLite.execute {
-                sqlite3_prepare_v2(database,
-                                   """
-                                   VACUUM;
-                                   """,
-                                   -1,
-                                   &vacuumStatement,
-                                   nil) }
-        } catch {}
+    deinit {
+        try? closeDatabase()
     }
 
     public func store(_ entry: CacheEntry, for url: URL) {
@@ -105,7 +48,9 @@ public class SQLiteStorage: Storage {
             try SQLite.execute { sqlite3_bind_text(statement, 1, url.absoluteString.cString(using: .utf8), -1, SQLITE_TRANSIENT) }
             try SQLite.execute { sqlite3_bind_text(statement, 2, entry.url.absoluteString.cString(using: .utf8), -1, SQLITE_TRANSIENT) }
             try SQLite.execute { entry.data.withUnsafeBytes { sqlite3_bind_blob(statement, 3, $0, Int32(entry.data.count), SQLITE_TRANSIENT) } }
-            try SQLite.execute { sqlite3_bind_text(statement, 4, entry.contentType, -1, SQLITE_TRANSIENT) }
+            if let contentType = entry.contentType {
+                try SQLite.execute { sqlite3_bind_text(statement, 4, contentType.cString(using: .utf8), -1, SQLITE_TRANSIENT) }
+            }
             if let timeToLive = entry.timeToLive {
                 try SQLite.execute { sqlite3_bind_int64(statement, 5, sqlite3_int64(bitPattern: UInt64(timeToLive))) }
             }
@@ -130,8 +75,11 @@ public class SQLiteStorage: Storage {
                 return nil
             }
             let byteCount = sqlite3_column_bytes(statement, 1)
-            guard let mime = sqlite3_column_text(statement, 2) else {
-                return nil
+            let contentType: String?
+            if let mime = sqlite3_column_text(statement, 2) {
+                contentType = String(cString: mime)
+            } else {
+                contentType = nil
             }
             let ttl = sqlite3_column_int64(statement, 3)
             let createdAt = sqlite3_column_int64(statement, 4)
@@ -139,7 +87,7 @@ public class SQLiteStorage: Storage {
 
             entry = CacheEntry(url: u,
                                data: Data(bytes: bytes, count: Int(byteCount)),
-                               contentType: String(cString: mime),
+                               contentType: contentType,
                                timeToLive: TimeInterval(ttl),
                                creationDate: Date(timeIntervalSince1970: TimeInterval(createdAt)),
                                modificationDate: Date(timeIntervalSince1970: TimeInterval(updatedAt)))
@@ -185,24 +133,131 @@ public class SQLiteStorage: Storage {
         } catch {}
     }
 
-    private func createOrOpenDatabase(path: String) throws {
+    private func openDatabase(path: String) throws {
         try SQLite.execute { sqlite3_open_v2(path, &database, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, nil) }
         try SQLite.execute {
             sqlite3_exec(database,
                          """
-                             CREATE TABLE IF NOT EXISTS entry (
-                                 id TEXT NOT NULL PRIMARY KEY,
-                                 url TEXT NOT NULL,
-                                 data BLOB NOT NULL,
-                                 mime TEXT,
-                                 ttl INTEGER,
-                                 created_at INTEGER NOT NULL,
-                                 updated_at INTEGER NOT NULL
-                             );
-                             """,
+                         CREATE TABLE IF NOT EXISTS entry (
+                             id TEXT NOT NULL PRIMARY KEY,
+                             url TEXT NOT NULL,
+                             data BLOB NOT NULL,
+                             mime TEXT,
+                             ttl INTEGER,
+                             created_at INTEGER NOT NULL,
+                             updated_at INTEGER NOT NULL
+                         );
+                         """,
                          nil,
                          nil,
                          nil) }
+        try validateSchemaVersion()
+        try prepareStatements()
+    }
+
+    private func validateSchemaVersion() throws {
+        var statement: OpaquePointer?
+        defer {
+            try? finalizeStatement(statement)
+        }
+        try SQLite.execute {
+            sqlite3_prepare_v2(database,
+                               """
+                               PRAGMA user_version;
+                               """,
+                               -1,
+                               &statement,
+                               nil) }
+        guard sqlite3_step(statement) == SQLITE_ROW else {
+            throw SQLite.SQLiteError.shemaChanged
+        }
+        guard sqlite3_column_int64(statement, 0) == SQLiteStorage.schemaVersion else {
+            throw SQLite.SQLiteError.shemaChanged
+        }
+    }
+
+    private func prepareStatements() throws {
+        try SQLite.execute {
+            sqlite3_prepare_v2(database,
+                               """
+                               REPLACE INTO entry
+                                   (id, url, data, mime, ttl, created_at, updated_at)
+                               VALUES
+                                   (?,  ?,   ?,    ?,    ?,   ?,          ?);
+                               """,
+                               -1,
+                               &replaceStatement,
+                               nil) }
+
+        try SQLite.execute {
+            sqlite3_prepare_v2(database,
+                               """
+                               SELECT
+                                   url, data, mime, ttl, created_at, updated_at
+                               FROM
+                                   entry
+                               WHERE id = ?;
+                               """,
+                               -1,
+                               &selectStatement,
+                               nil) }
+
+        try SQLite.execute {
+            sqlite3_prepare_v2(database,
+                               """
+                               DELETE FROM entry WHERE id = ?;
+                               """,
+                               -1,
+                               &deleteStatement,
+                               nil) }
+
+        try SQLite.execute {
+            sqlite3_prepare_v2(database,
+                               """
+                               DELETE FROM entry;
+                               """,
+                               -1,
+                               &deleteAllStatement,
+                               nil) }
+
+        try SQLite.execute {
+            sqlite3_prepare_v2(database,
+                               """
+                               DELETE FROM entry WHERE (updated_at + ttl) < CAST(strftime('%s', 'now') AS INTEGER);
+                               """,
+                               -1,
+                               &deleteOutdatedStatement,
+                               nil) }
+
+        try SQLite.execute {
+            sqlite3_prepare_v2(database,
+                               """
+                               VACUUM;
+                               """,
+                               -1,
+                               &vacuumStatement,
+                               nil) }
+    }
+
+    private func closeDatabase() throws {
+        try finalizeStatement(replaceStatement)
+        try finalizeStatement(selectStatement)
+        try finalizeStatement(deleteStatement)
+        try finalizeStatement(deleteAllStatement)
+        try finalizeStatement(deleteOutdatedStatement)
+        try finalizeStatement(vacuumStatement)
+        if #available(iOS 8.2, *) {
+            guard let database = database else { return }
+            try SQLite.execute { sqlite3_close_v2(database) }
+        } else {
+            guard let database = database else { return }
+            try SQLite.execute { sqlite3_close(database) }
+        }
+    }
+
+    func finalizeStatement(_ statement: OpaquePointer?) throws {
+        guard let statement = statement else { return }
+        try SQLite.execute { sqlite3_finalize(statement) }
     }
 
     private enum SQLite {
@@ -220,8 +275,9 @@ public class SQLiteStorage: Storage {
             }
         }
 
-        private enum SQLiteError: Error {
+        enum SQLiteError: Error {
             case error(Int32)
+            case shemaChanged
         }
     }
 }
