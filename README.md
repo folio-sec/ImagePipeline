@@ -71,7 +71,7 @@ ImagePipeline.shared.load(/* imageURL */, into: /* image view */, processors: [r
 
 ## TTL
 
-ImagePipeline respects the `max-age` value of `Cache-Control` response header, and sets independent TTL for each image.
+ImagePipeline respects the [`max-age` value of `Cache-Control` response header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control), and sets independent TTL for each image.
 
 ## Supported content types
 
