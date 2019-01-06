@@ -69,6 +69,10 @@ ImagePipeline.shared.load(/* imageURL */, into: /* image view */, processors: [r
 |:-:|:-:|
 |![resize](https://user-images.githubusercontent.com/40610/50732307-a79ab000-11bb-11e9-87c6-0a83a845c076.jpeg)|![testblurfilter 2](https://user-images.githubusercontent.com/40610/50732310-b84b2600-11bb-11e9-9f38-e0f80632e1a4.png)|
 
+## TTL
+
+ImagePipeline respects the `max-age` value of `Cache-Control` response header, and sets independent TTL for each image.
+
 ## Supported content types
 
 ✅ PNG  
