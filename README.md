@@ -29,9 +29,49 @@ override func collectionView(_ collectionView: UICollectionView, cellForItemAt i
 }
 ```
 
+### Resize
+
+#### Aspect Fit (Default)
+
+```swift
+let resizer = ImageResizer(targetSize: CGSize(width: 400, height: 400))
+ImagePipeline.shared.load(/* imageURL */, into: /* image view */, processors: [resizer])
+```
+
+|Original|Resized|
+|:-:|:-:|
+|![1](https://user-images.githubusercontent.com/40610/50732276-11ff2080-11bb-11e9-863c-bbfa815a9e76.png)|![testimageresizeraspectfit 1](https://user-images.githubusercontent.com/40610/50732270-eaa85380-11ba-11e9-900c-7f5fa9df9334.png)|
+
+#### Aspect Fill
+
+```swift
+let resizer = ImageResizer(targetSize: CGSize(width: 400, height: 400), contentMode: .aspectFill)
+ImagePipeline.shared.load(/* imageURL */, into: /* image view */, processors: [resizer])
+```
+
+|Original|Resized|
+|:-:|:-:|
+|![1](https://user-images.githubusercontent.com/40610/50732276-11ff2080-11bb-11e9-863c-bbfa815a9e76.png)|![testimageresizeraspectfill 1](https://user-images.githubusercontent.com/40610/50732269-eaa85380-11ba-11e9-9b02-c268e377532b.png)|
+
+
+### Resize & Blur
+
+```swift
+let scale: CGFloat = 2
+let size = CGSize(width: 375 * scale, height: 232 * scale)
+let resizer = ImageResizer(targetSize: size, contentMode: .aspectFill)
+let filter = BlurFilter(style: .light)
+
+ImagePipeline.shared.load(/* imageURL */, into: /* image view */, processors: [resizer, filter])
+```
+
+|Original|Blurred|
+|:-:|:-:|
+|![resize](https://user-images.githubusercontent.com/40610/50732307-a79ab000-11bb-11e9-87c6-0a83a845c076.jpeg)|![testblurfilter 2](https://user-images.githubusercontent.com/40610/50732310-b84b2600-11bb-11e9-9f38-e0f80632e1a4.png)|
+
 ## Supported content types
 
 ✅ PNG  
 ✅ JPEG  
 ✅ GIF  
-✅ WebP  
+✅ WebP 
