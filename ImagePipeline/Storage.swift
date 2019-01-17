@@ -169,10 +169,10 @@ public class SQLiteStorage: Storage {
                                &statement,
                                nil) }
         guard sqlite3_step(statement) == SQLITE_ROW else {
-            throw SQLite.SQLiteError.shemaChanged
+            throw SQLite.SQLiteError.schemaChanged
         }
         guard sqlite3_column_int64(statement, 0) == SQLiteStorage.schemaVersion else {
-            throw SQLite.SQLiteError.shemaChanged
+            throw SQLite.SQLiteError.schemaChanged
         }
     }
 
@@ -277,7 +277,7 @@ public class SQLiteStorage: Storage {
 
         enum SQLiteError: Error {
             case error(Int32)
-            case shemaChanged
+            case schemaChanged
         }
     }
 }
