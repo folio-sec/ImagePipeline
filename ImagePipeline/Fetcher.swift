@@ -29,7 +29,7 @@ public final class Fetcher: Fetching {
         let queue = self.queue
         let taskExecutor = self.taskExecutor
 
-        let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData)
         let task = session.dataTask(with: request) { (data, response, error) in
             queue.sync {
                 taskExecutor.removeTask(for: url)
