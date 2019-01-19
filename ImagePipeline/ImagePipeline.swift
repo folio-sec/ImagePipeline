@@ -116,11 +116,13 @@ public final class ImagePipeline {
 
     @objc
     private func didReceiveMemoryWarning(notification: Notification) {
+        controllers.removeAll()
         memoryCache.removeAll()
     }
 
     @objc
     private func didEnterBackground(notification: Notification) {
+        controllers.removeAll()
         diskCache.removeOutdated()
         diskCache.compact()
     }
