@@ -142,9 +142,8 @@ private let regex = try! NSRegularExpression(pattern:
     ([a-zA-Z][a-zA-Z_-]*)\\s*(?:=(?:"([^"]*)"|([^ \t",;]*)))?
     """, options: [])
 internal func parseCacheControlHeader(_ cacheControl: String) -> [String: String] {
-    var directives = [String: String]()
     let matches = regex.matches(in: cacheControl, options: [], range: NSRange(location: 0, length: cacheControl.utf16.count))
-    for result in matches {
+    return matches.reduce(into: [String: String]()) { (directives, result) in
         if let range = Range(result.range, in: cacheControl) {
             let directive = cacheControl[range]
             let pair = directive.split(separator: "=")
@@ -153,5 +152,4 @@ internal func parseCacheControlHeader(_ cacheControl: String) -> [String: String
             }
         }
     }
-    return directives
 }
