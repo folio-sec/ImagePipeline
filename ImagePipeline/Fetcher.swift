@@ -141,7 +141,7 @@ private let regex = try! NSRegularExpression(pattern:
     """
     ([a-zA-Z][a-zA-Z_-]*)\\s*(?:=(?:"([^"]*)"|([^ \t",;]*)))?
     """, options: [])
-private func parseCacheControlHeader(_ cacheControl: String) -> [String: String] {
+internal func parseCacheControlHeader(_ cacheControl: String) -> [String: String] {
     var directives = [String: String]()
     let matches = regex.matches(in: cacheControl, options: [], range: NSRange(location: 0, length: cacheControl.utf16.count))
     for result in matches {
