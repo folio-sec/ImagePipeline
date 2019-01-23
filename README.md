@@ -1,4 +1,5 @@
 [![Build Status](https://app.bitrise.io/app/d45feb8efa5f59db/status.svg?token=kXMrRSrj4C8sHeWB26tQuw)](https://app.bitrise.io/app/d45feb8efa5f59db)
+[![codecov](https://codecov.io/gh/folio-sec/ImagePipeline/branch/master/graph/badge.svg)](https://codecov.io/gh/folio-sec/ImagePipeline)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 # ImagePipeline
