@@ -1,4 +1,4 @@
-[![Build Status](https://app.bitrise.io/app/05849474f2d15fa8/status.svg?token=z0BK0SJnKUHzy8tf3zIGYg)](https://app.bitrise.io/app/05849474f2d15fa8)
+[![Build Status](https://app.bitrise.io/app/d45feb8efa5f59db/status.svg?token=kXMrRSrj4C8sHeWB26tQuw)](https://app.bitrise.io/app/d45feb8efa5f59db)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 # ImagePipeline
