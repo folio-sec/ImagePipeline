@@ -129,7 +129,7 @@ public final class ImagePipeline {
 }
 
 private class ImageViewReference: Hashable {
-    weak var imageView: UIImageView?
+    var imageView: UIImageView?
     private let objectIdentifier: ObjectIdentifier
 
     init(_ imageView: UIImageView) {
