@@ -90,20 +90,9 @@ class FetcherTests: XCTestCase {
                 })
             }
 
-            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
-            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
-            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
-            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
-            RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.5))
+            RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
+            XCTAssertNotNil(weakFetcher)
         }
-
-        XCTAssertNil(weakFetcher)
-
-        RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
-        XCTAssertNil(weakFetcher)
-
-        RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
-        XCTAssertNil(weakFetcher)
 
         RunLoop.main.run(until: Date(timeIntervalSinceNow: 1))
         XCTAssertNil(weakFetcher)
