@@ -80,3 +80,21 @@ ImagePipeline respects the [`max-age` value of `Cache-Control` response header](
 ✅ JPEG  
 ✅ GIF  
 ✅ WebP 
+
+
+## Installation ##
+
+### [Carthage] ###
+
+[Carthage]: https://github.com/Carthage/Carthage
+
+```
+github "folio-sec/APIClient"
+```
+
+Then run `carthage update`.
+
+Follow the current instructions in [Carthage's README][carthage-installation]
+for up to date installation instructions.
+
+[carthage-installation]: https://github.com/Carthage/Carthage#adding-frameworks-to-an-application
