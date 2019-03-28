@@ -71,7 +71,8 @@ public struct BlurFilter: ImageProcessing {
 
             if hasBlur {
                 let inputRadius = blurRadius * scale
-                var radius = UInt32(floor(inputRadius * 3 * sqrt(2 * CGFloat.pi) / 4 + 0.5))
+                let r = inputRadius * 3 * sqrt(2 * CGFloat.pi) / 4 + 0.5
+                var radius = UInt32(floor(r))
                 if (radius % 2 != 1) {
                     radius += 1; // force radius to be odd so that the three box-blur methodology works.
                 }
