@@ -89,7 +89,7 @@ ImagePipeline respects the [`max-age` value of `Cache-Control` response header](
 [Carthage]: https://github.com/Carthage/Carthage
 
 ```
-github "folio-sec/APIClient"
+github "folio-sec/ImagePipeline"
 ```
 
 Then run `carthage update`.
