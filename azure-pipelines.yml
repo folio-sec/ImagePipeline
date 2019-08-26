@@ -1,0 +1,43 @@
+trigger:
+- master
+pr:
+- master
+
+variables:
+  vmImage: 'macOS-10.14'
+  scheme: 'ImagePipeline'
+  sdk: 'iphoneos'
+  configuration: 'Release'
+jobs:
+- job: Build
+  pool:
+    vmImage: '$(vmImage)'
+  strategy:
+    matrix:
+      xcode11:
+        DEVELOPER_DIR: /Applications/Xcode_11.app
+      xcode10:
+        DEVELOPER_DIR: /Applications/Xcode_10.3.app
+  steps:
+  - task: Xcode@5
+    inputs:
+      actions: 'build'
+      scheme: '$(scheme)'
+      sdk: '$(sdk)'
+      configuration: '$(configuration)'
+      xcWorkspacePath: '$(scheme).xcworkspace'
+    displayName: 'Build'
+  - bash: |
+      set -ex
+
+      export NSUnbufferedIO=YES
+
+      carthage bootstrap --platform ios --no-use-binaries
+
+      set -o pipefail && xcodebuild test -project ImagePipeline.xcodeproj -scheme ImagePipeline -sdk iphonesimulator -enableCodeCoverage YES -derivedDataPath Build -destination 'platform=iOS Simulator,name=iPhone XS,OS=12.1' -resultBundlePath TestResults
+
+      xcrun llvm-cov show -instr-profile Build/*/ProfileData/*/Coverage.profdata Build/*/Products/*/ImagePipeline.framework/ImagePipeline 
+      xcrun llvm-cov report -instr-profile Build/*/ProfileData/*/Coverage.profdata Build/*/Products/*/ImagePipeline.framework/ImagePipeline 
+
+      carthage build --no-skip-current --platform ios --no-use-binaries
+    displayName: 'Test'
