@@ -25,7 +25,7 @@ jobs:
       scheme: '$(scheme)'
       sdk: '$(sdk)'
       configuration: '$(configuration)'
-      xcWorkspacePath: '$(scheme).xcworkspace'
+      xcWorkspacePath: '$(scheme).xcodeproj'
     displayName: 'Build'
   - bash: |
       set -ex
