@@ -25,6 +25,50 @@ public final class ImagePipeline {
         NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
+    public func load(_ url: URL, processors: [ImageProcessing] = [], completion: @escaping (UIImage?) -> Void) {
+        if let image = memoryCache.load(for: url) {
+            processImage(image, processors: processors) {
+                completion($0)
+            }
+            return
+        }
+
+        if let entry = diskCache.load(for: url) {
+            if !isTTLExpired(ttl: entry.timeToLive, date: entry.modificationDate), let image = decoder.decode(data: entry.data) {
+                self.memoryCache.store(image, for: url)
+
+                processImage(image, processors: processors) {
+                    completion($0)
+                }
+                return
+            }
+        }
+
+        queue.async { [weak self] in
+            guard let self = self else { return }
+
+            self.fetcher.fetch(url, completion: { [weak self] in
+                guard let self = self else { return }
+
+                guard let image = self.decoder.decode(data: $0.data) else {
+                    completion(nil)
+                    return
+                }
+
+                self.diskCache.store($0, for: url)
+                self.memoryCache.store(image, for: url)
+
+                self.processImage(image, processors: processors) {
+                    completion($0)
+                }
+            }, cancellation: {
+                /* do nothing */
+            }, failure: { _ in
+                completion(nil)
+            })
+        }
+    }
+
     public func load(_ url: URL, into imageView: UIImageView, transition: Transition = .none, defaultImage: UIImage? = nil, failureImage: UIImage? = nil, processors: [ImageProcessing] = []) {
         if let defaultImage = defaultImage {
             imageView.image = defaultImage
