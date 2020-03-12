@@ -454,7 +454,7 @@
 		140C336A21D93F5B007BDE61 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = include/webp;
+			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
 				140C336B21D93F77007BDE61 /* types.h in CopyFiles */,
@@ -487,7 +487,6 @@
 		140C336321D93F06007BDE61 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		140C336421D93F06007BDE61 /* decode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = decode.h; sourceTree = "<group>"; };
 		140C336621D93F06007BDE61 /* libwebpdecoder.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwebpdecoder.a; sourceTree = "<group>"; };
-		140C336721D93F1D007BDE61 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		140C336F21D945CA007BDE61 /* MemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCache.swift; sourceTree = "<group>"; };
 		140C337121D945D9007BDE61 /* DiskCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCache.swift; sourceTree = "<group>"; };
 		140C337321D945EB007BDE61 /* CacheEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheEntry.swift; sourceTree = "<group>"; };
@@ -903,6 +902,8 @@
 		1436530D21DC919500616F6C /* 13.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 13.jpg; sourceTree = "<group>"; };
 		1436530E21DC919500616F6C /* 8.webp */ = {isa = PBXFileReference; lastKnownFileType = file; path = 8.webp; sourceTree = "<group>"; };
 		1436530F21DC919600616F6C /* 26.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = 26.gif; sourceTree = "<group>"; };
+		1441E952241A96DB001B08E0 /* module.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		1496D481241A900200900064 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		14C3A6C421E06FAC00317536 /* FetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetcherTests.swift; sourceTree = "<group>"; };
 		14C3A6C621E0701300317536 /* DecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecoderTests.swift; sourceTree = "<group>"; };
 		14C3A6C821E0706000317536 /* MemoryCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCacheTests.swift; sourceTree = "<group>"; };
@@ -940,10 +941,11 @@
 		140C333421D93BD3007BDE61 = {
 			isa = PBXGroup;
 			children = (
-				140C334021D93BD3007BDE61 /* ImagePipeline */,
+				1496D481241A900200900064 /* Package.swift */,
+				14D04704241A781100EDCA50 /* Sources */,
+				14D04705241A78C200EDCA50 /* Tests */,
 				140C76CE21DA579600A4582F /* Configurations */,
 				140C335E21D93E40007BDE61 /* Vendor */,
-				140C334B21D93BD3007BDE61 /* ImagePipelineTests */,
 				140C333F21D93BD3007BDE61 /* Products */,
 				140C336D21D93F9E007BDE61 /* Frameworks */,
 			);
@@ -973,7 +975,6 @@
 				140C337121D945D9007BDE61 /* DiskCache.swift */,
 				140C339721D9D47C007BDE61 /* Storage.swift */,
 				140C337321D945EB007BDE61 /* CacheEntry.swift */,
-				140C336721D93F1D007BDE61 /* module.modulemap */,
 				140C334221D93BD3007BDE61 /* Info.plist */,
 			);
 			path = ImagePipeline;
@@ -1042,11 +1043,11 @@
 		140C76CE21DA579600A4582F /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
-				140C76CF21DA579600A4582F /* Release.xcconfig */,
-				140C76D021DA579600A4582F /* ImagePipelineTests.xcconfig */,
 				140C76D121DA579600A4582F /* Shared.xcconfig */,
-				140C76D221DA579600A4582F /* ImagePipeline.xcconfig */,
+				140C76CF21DA579600A4582F /* Release.xcconfig */,
 				140C76D321DA579600A4582F /* Debug.xcconfig */,
+				140C76D221DA579600A4582F /* ImagePipeline.xcconfig */,
+				140C76D021DA579600A4582F /* ImagePipelineTests.xcconfig */,
 			);
 			path = Configurations;
 			sourceTree = "<group>";
@@ -1460,6 +1461,39 @@
 				14C3A6FA21E10EE300317536 /* resize.jpeg */,
 			);
 			path = Fixtures;
+			sourceTree = "<group>";
+		};
+		1441E950241A96DB001B08E0 /* WebPDecoder */ = {
+			isa = PBXGroup;
+			children = (
+				1441E951241A96DB001B08E0 /* include */,
+			);
+			path = WebPDecoder;
+			sourceTree = "<group>";
+		};
+		1441E951241A96DB001B08E0 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				1441E952241A96DB001B08E0 /* module.modulemap */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		14D04704241A781100EDCA50 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				1441E950241A96DB001B08E0 /* WebPDecoder */,
+				140C334021D93BD3007BDE61 /* ImagePipeline */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		14D04705241A78C200EDCA50 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				140C334B21D93BD3007BDE61 /* ImagePipelineTests */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

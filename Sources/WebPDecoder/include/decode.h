@@ -1,0 +1,1 @@
+../../../Vendor/webp/include/decode.h
