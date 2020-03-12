@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 public final class ImagePipeline {
     public static let shared = ImagePipeline()

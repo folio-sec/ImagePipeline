@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 public protocol ImageCaching {
     func store(_ image: UIImage, for url: URL)

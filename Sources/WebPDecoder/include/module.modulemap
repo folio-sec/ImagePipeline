@@ -6,6 +6,6 @@ framework module ImagePipeline {
 }
 
 module WebPDecoder {
-    header "include/webp/decode.h"
-    header "include/webp/types.h"
+    header "decode.h"
+    header "types.h"
 }
