@@ -71,6 +71,36 @@ class ImagePipelineTests: XCTestCase {
         }
     }
 
+    func testImagePipelineCallbackSuccess() {
+        let ex = expectation(description: "")
+
+        let pipeline = ImagePipeline()
+        pipeline.load(URL(string: "https://satyr.io/80x60?flag=svk&type=webp&delay=1000")!, processors: []) { (image: UIImage?) in
+            if let image = image {
+                assertSnapshot(matching: image, as: .image)
+            } else {
+                XCTFail()
+            }
+            ex.fulfill()
+        }
+
+        wait(for: [ex], timeout: 5)
+    }
+
+    func testImagePipelineCallbackFailure() {
+        let ex = expectation(description: "")
+
+        let pipeline = ImagePipeline()
+        pipeline.load(URL(string: "https://httpbin.org/status/400")!, processors: []) { (image: UIImage?) in
+            if let _ = image {
+                XCTFail()
+            }
+            ex.fulfill()
+        }
+
+        wait(for: [ex], timeout: 2)
+    }
+
     func testImagePipelineTTL() {
         let imageView = UIImageView()
         XCTAssertNil(imageView.image)
