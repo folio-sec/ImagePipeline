@@ -1560,10 +1560,11 @@
 				TargetAttributes = {
 					140C333D21D93BD3007BDE61 = {
 						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1130;
 					};
 					140C334621D93BD3007BDE61 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
@@ -1573,6 +1574,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 140C333421D93BD3007BDE61;
 			productRefGroup = 140C333F21D93BD3007BDE61 /* Products */;
