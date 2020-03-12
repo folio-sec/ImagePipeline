@@ -1482,8 +1482,8 @@
 		14D04704241A781100EDCA50 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				1441E950241A96DB001B08E0 /* WebPDecoder */,
 				140C334021D93BD3007BDE61 /* ImagePipeline */,
+				1441E950241A96DB001B08E0 /* WebPDecoder */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
