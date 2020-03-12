@@ -47,7 +47,7 @@ public class SQLiteStorage: Storage {
         do {
             try SQLite.execute { sqlite3_bind_text(statement, 1, url.absoluteString.cString(using: .utf8), -1, SQLITE_TRANSIENT) }
             try SQLite.execute { sqlite3_bind_text(statement, 2, entry.url.absoluteString.cString(using: .utf8), -1, SQLITE_TRANSIENT) }
-            try SQLite.execute { entry.data.withUnsafeBytes { sqlite3_bind_blob(statement, 3, $0, Int32(entry.data.count), SQLITE_TRANSIENT) } }
+            try SQLite.execute { entry.data.withUnsafeBytes { sqlite3_bind_blob(statement, 3, $0.baseAddress, Int32($0.count), SQLITE_TRANSIENT) } }
             if let contentType = entry.contentType {
                 try SQLite.execute { sqlite3_bind_text(statement, 4, contentType.cString(using: .utf8), -1, SQLITE_TRANSIENT) }
             }

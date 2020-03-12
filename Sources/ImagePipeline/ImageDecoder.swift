@@ -23,7 +23,11 @@ public struct ImageDecoder: ImageDecoding {
             return nil
         }
 
-        return data.withUnsafeBytes { (bytes: UnsafePointer<UInt8>) in
+        return data.withUnsafeBytes { (buffer: UnsafeRawBufferPointer) in
+            guard let bytes = buffer.bindMemory(to: UInt8.self).baseAddress else {
+                return nil
+            }
+
             var width: Int32 = 0
             var height: Int32 = 0
 
