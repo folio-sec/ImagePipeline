@@ -12,7 +12,7 @@ let package = Package(
             targets: ["ImagePipeline"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/kishikawakatsumi/webpdecoder.git", .branch("master")),
+        .package(url: "https://github.com/kishikawakatsumi/webpdecoder.git", .revision("bdba7712fd7e26e6ec3a2e4bcfaaa127b2d59844")),
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.7.2"),
     ],
     targets: [

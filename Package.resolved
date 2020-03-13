@@ -14,7 +14,7 @@
         "package": "webpdecoder",
         "repositoryURL": "https://github.com/kishikawakatsumi/webpdecoder.git",
         "state": {
-          "branch": "master",
+          "branch": null,
           "revision": "bdba7712fd7e26e6ec3a2e4bcfaaa127b2d59844",
           "version": null
         }
