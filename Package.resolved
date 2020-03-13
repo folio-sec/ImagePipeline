@@ -9,6 +9,15 @@
           "revision": "114882386a815f4a2e6d8f2f7ee4857acd372438",
           "version": "1.7.2"
         }
+      },
+      {
+        "package": "webpdecoder",
+        "repositoryURL": "https://github.com/kishikawakatsumi/webpdecoder.git",
+        "state": {
+          "branch": "master",
+          "revision": "bdba7712fd7e26e6ec3a2e4bcfaaa127b2d59844",
+          "version": null
+        }
       }
     ]
   },
