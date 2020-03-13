@@ -9,3 +9,4 @@ module WebPDecoder {
     header "decode.h"
     header "types.h"
 }
+

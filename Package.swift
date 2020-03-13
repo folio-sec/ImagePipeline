@@ -12,16 +12,11 @@ let package = Package(
             targets: ["ImagePipeline"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/kishikawakatsumi/webpdecoder.git", .branch("master")),
         .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", from: "1.7.2"),
     ],
     targets: [
-        .target(name: "ImagePipeline", dependencies: ["WebPDecoder"]),
-        .target(
-            name: "WebPDecoder", dependencies: [],
-            linkerSettings: [.linkedLibrary("webpdecoder"), .unsafeFlags(["-L$BUILD_DIR/../../SourcePackages/checkouts/ImagePipeline/Vendor/webp/lib"])]),
-        .testTarget(
-            name: "ImagePipelineTests",
-            dependencies: ["ImagePipeline", "SnapshotTesting"]
-        ),
+        .target(name: "ImagePipeline", dependencies: ["webpdecoder"]),
+        .testTarget(name: "ImagePipelineTests", dependencies: ["ImagePipeline", "SnapshotTesting"]),
     ]
 )
