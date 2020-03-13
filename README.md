@@ -1,6 +1,9 @@
-[![Build Status](https://app.bitrise.io/app/70a57d2f2d06e76e/status.svg?token=wHsIhXanHWmWXA-busKYDQ&branch=master)](https://app.bitrise.io/app/70a57d2f2d06e76e)
+
+[![Build Status](https://dev.azure.com/kishikawakatsumi/ImagePipeline/_apis/build/status/folio-sec.ImagePipeline?branchName=master)](https://dev.azure.com/kishikawakatsumi/ImagePipeline/_build/latest?definitionId=3&branchName=master)
 [![codecov](https://codecov.io/gh/folio-sec/ImagePipeline/branch/master/graph/badge.svg)](https://codecov.io/gh/folio-sec/ImagePipeline)
+<a href="https://swift.org/package-manager/"><img src="https://img.shields.io/badge/SPM-ready-orange.svg"></a>
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+<a href="https://github.com/kishikawakatsumi/IBPCollectionViewCompositionalLayout/blob/master/LICENSE"><img alt="MIT License" src="http://img.shields.io/badge/license-MIT-blue.svg"/></a>
 
 # ImagePipeline
 Folio Image Pipeline is an image loading and caching framework for iOS clients
