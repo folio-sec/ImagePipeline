@@ -255,7 +255,7 @@ public class SQLiteStorage: Storage {
         }
     }
 
-    func finalizeStatement(_ statement: OpaquePointer?) throws {
+    private func finalizeStatement(_ statement: OpaquePointer?) throws {
         guard let statement = statement else { return }
         try SQLite.execute { sqlite3_finalize(statement) }
     }

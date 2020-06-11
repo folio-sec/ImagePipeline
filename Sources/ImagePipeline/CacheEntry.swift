@@ -12,7 +12,7 @@ public struct CacheEntry {
         self.url = url
         self.data = data
         self.contentType = contentType
-        self.timeToLive = timeToLive
+        self.timeToLive = timeToLive == 0 ? nil : timeToLive
         self.creationDate = creationDate
         self.modificationDate = modificationDate
     }
