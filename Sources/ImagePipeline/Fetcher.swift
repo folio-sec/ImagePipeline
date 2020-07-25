@@ -86,22 +86,19 @@ private class TaskExecutor {
 
     func push(_ task: DownloadTask) {
         if let index = tasks.firstIndex(of: task) {
-            tasks.remove(at: index)
+            tasks.remove(at: index).sessionTask.cancel()
         }
         tasks.append(task)
         startPendingTasks()
     }
 
     func removeTask(for url: URL) {
-        runningTasks[url] = nil
+        runningTasks.removeValue(forKey: url)?.sessionTask.cancel()
         startPendingTasks()
     }
 
     func cancel(for url: URL) {
-        if let task = runningTasks[url] {
-            task.sessionTask.cancel()
-            runningTasks[url] = nil
-        }
+        runningTasks.removeValue(forKey: url)?.sessionTask.cancel()
     }
 
     func cancelAll() {
