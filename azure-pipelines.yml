@@ -18,6 +18,6 @@ jobs:
       export NSUnbufferedIO=YES
       swift build -v -Xswiftc "-sdk" -Xswiftc "$(xcrun --sdk iphonesimulator --show-sdk-path)" -Xswiftc "-target" -Xswiftc "x86_64-apple-ios13.0-simulator"
       carthage bootstrap --platform ios --no-use-binaries
-      xcodebuild build-for-testing -project ImagePipeline.xcodeproj -scheme ImagePipeline -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11 Pro,OS=13.3'
-      xcodebuild test-without-building -project ImagePipeline.xcodeproj -scheme ImagePipeline -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11 Pro,OS=13.3'
+      xcodebuild build-for-testing -project ImagePipeline.xcodeproj -scheme ImagePipeline -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11 Pro,OS=13.6'
+      xcodebuild test-without-building -project ImagePipeline.xcodeproj -scheme ImagePipeline -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11 Pro,OS=13.6'
   displayName: 'Tests'
